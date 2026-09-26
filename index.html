@@ -12,6 +12,8 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- SheetJS (XLSX) para exportación a Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
     <script>
         tailwind.config = {
@@ -409,6 +411,9 @@
                         <h4 class="font-extrabold text-sm text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
                             <i class="fa-solid fa-users text-emerald-600"></i> Clientes Registrados (<span id="db-count-clientes">0</span>)
                         </h4>
+                        <button onclick="exportarTablaExcel('clientes')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition">
+                            <i class="fa-solid fa-file-excel"></i> Exportar Clientes a Excel
+                        </button>
                     </div>
                     <div class="overflow-x-auto border border-slate-200 rounded-xl">
                         <table class="w-full text-left border-collapse text-xs">
@@ -433,6 +438,9 @@
                         <h4 class="font-extrabold text-sm text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
                             <i class="fa-solid fa-receipt text-amber-500"></i> Pedidos Recibidos (<span id="db-count-pedidos">0</span>)
                         </h4>
+                        <button onclick="exportarTablaExcel('pedidos')" class="bg-amber-600 hover:bg-amber-700 text-white px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition">
+                            <i class="fa-solid fa-file-excel"></i> Exportar Pedidos a Excel
+                        </button>
                     </div>
                     <div class="overflow-x-auto border border-slate-200 rounded-xl">
                         <table class="w-full text-left border-collapse text-xs">
@@ -525,7 +533,6 @@
             clienteActual = clienteObj;
 
             try {
-                // Guardamos el cliente y pedimos que nos devuelva la fila insertada con .select()
                 const { data, error } = await supabaseClient
                     .from('clientes')
                     .insert([clienteObj])
@@ -671,14 +678,12 @@
             const total = subtotal + delivery;
             const igv = total * 0.18;
 
-            // Formato exacto JSON que acepta la columna 'items' (jsonb)
             const itemsJSON = carrito.map(item => ({
                 plato: item.nombreBase,
                 detalles: item.detalles,
                 precio: item.precioFinal
             }));
 
-            // Objeto adaptado 100% a las columnas de tu tabla 'pedidos'
             const pedidoPayload = {
                 items: itemsJSON,
                 subtotal: subtotal,
@@ -686,7 +691,6 @@
                 igv: Number(igv.toFixed(2))
             };
 
-            // Vínculo con cliente si existe cliente_id
             if (clienteIdGuardado) {
                 pedidoPayload.cliente_id = clienteIdGuardado;
             }
@@ -759,6 +763,41 @@
                 document.getElementById('modal-database').classList.remove('hidden');
             } else if (pass !== null) {
                 alert("Clave incorrecta.");
+            }
+        }
+
+        async function exportarTablaExcel(nombreTabla) {
+            try {
+                const { data, error } = await supabaseClient.from(nombreTabla).select('*');
+                
+                if (error) {
+                    alert("Error al obtener datos: " + error.message);
+                    return;
+                }
+
+                if (!data || data.length === 0) {
+                    alert("No hay registros en la tabla " + nombreTabla + " para exportar.");
+                    return;
+                }
+
+                const datosProcesados = data.map(registro => {
+                    if (registro.items && typeof registro.items === 'object') {
+                        return {
+                            ...registro,
+                            items: JSON.stringify(registro.items)
+                        };
+                    }
+                    return registro;
+                });
+
+                const hoja = XLSX.utils.json_to_sheet(datosProcesados);
+                const libro = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(libro, hoja, nombreTabla);
+
+                XLSX.writeFile(libro, `Reporte_${nombreTabla}_LunchGo.xlsx`);
+            } catch (err) {
+                console.error("Error exportando a Excel:", err);
+                alert("Ocurrió un problema al generar el archivo Excel.");
             }
         }
 
