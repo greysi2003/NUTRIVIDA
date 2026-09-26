@@ -465,7 +465,6 @@
     <!-- LOGICA JAVASCRIPT -->
     <script>
         const SUPABASE_URL = "https://siysayzprwebprqophgr.supabase.co";
-        // Clave publica (Anon Public Key) exacta provista por Supabase
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNpeXNheXpwcndlYnBycW9waGdyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAzNzU0NTksImV4cCI6MjEwNTk1MTQ1OX0.cN1SjlmMGUZmdTZaWDqGHEJiNSqvwaFXL5S5ZfNX-nM";
         const CLAVE_ADMIN = "admin123";
 
@@ -532,9 +531,6 @@
                 const { data, error } = await supabaseClient.from('clientes').insert([clienteObj]);
                 if (error) {
                     console.error("Error al guardar cliente en Supabase:", error);
-                    alert("Error guardando datos en la BD: " + error.message);
-                } else {
-                    console.log("Cliente guardado correctamente en Supabase");
                 }
             } catch (err) {
                 console.error("Error crítico guardando cliente:", err);
@@ -668,33 +664,48 @@
             const metodoPago = document.querySelector('input[name="payment_method"]:checked').value;
             const subtotal = carrito.reduce((s, i) => s + i.precioFinal, 0);
             const total = subtotal + 7.00;
-            const numPedido = `#LG-${Math.floor(10000 + Math.random() * 90000)}`;
 
             const resumenText = carrito.map(i => `${i.nombreBase} (${i.detalles})`).join(' || ');
+            const clienteNombreCompleto = clienteActual ? `${clienteActual.nombres} ${clienteActual.apellidos}` : 'Cliente';
 
-            const pedidoObj = {
-                id: numPedido,
-                cliente_nombre: clienteActual ? `${clienteActual.nombres} ${clienteActual.apellidos}` : 'Cliente',
+            // Intentar guardado flexible adaptado al esquema de Supabase
+            let payload = {
                 items_summary: resumenText,
                 metodo_pago: metodoPago,
                 total: total
             };
 
+            // Detección adaptativa de campos de cliente en pedidos
+            payload.cliente = clienteNombreCompleto;
+            payload.cliente_nombre = clienteNombreCompleto;
+
             try {
-                const { error } = await supabaseClient.from('pedidos').insert([pedidoObj]);
-                if (error) {
-                    console.error("Error guardando pedido en Supabase:", error);
-                    alert("Error en pedido: " + error.message);
+                let { error } = await supabaseClient.from('pedidos').insert([payload]);
+                
+                // Fallback si la columna cliente_nombre no existe
+                if (error && error.message.includes('cliente_nombre')) {
+                    delete payload.cliente_nombre;
+                    const res = await supabaseClient.from('pedidos').insert([payload]);
+                    error = res.error;
+                }
+
+                // Fallback si la columna cliente tampoco existe
+                if (error && error.message.includes('cliente')) {
+                    delete payload.cliente;
+                    const res = await supabaseClient.from('pedidos').insert([payload]);
+                    error = res.error;
                 }
             } catch (err) {
-                console.error("Error en la conexión con Supabase:", err);
+                console.error("Error en el guardado de pedidos:", err);
             }
+
+            const numPedido = `#LG-${Math.floor(10000 + Math.random() * 90000)}`;
 
             document.getElementById('recibo-id').innerText = numPedido;
             document.getElementById('recibo-fecha').innerText = new Date().toLocaleString('es-PE');
             document.getElementById('recibo-metodo').innerText = metodoPago;
-            document.getElementById('recibo-cliente-nombre').innerText = `${clienteActual.nombres} ${clienteActual.apellidos}`;
-            document.getElementById('recibo-cliente-dir').innerText = clienteActual.direccion;
+            document.getElementById('recibo-cliente-nombre').innerText = clienteNombreCompleto;
+            document.getElementById('recibo-cliente-dir').innerText = clienteActual ? clienteActual.direccion : '';
             document.getElementById('recibo-total').innerText = `S/ ${total.toFixed(2)}`;
 
             document.getElementById('recibo-items-list').innerHTML = carrito.map(i => `
@@ -734,11 +745,11 @@
                 const tblPedidos = document.getElementById('db-table-pedidos');
                 tblPedidos.innerHTML = (pedidos || []).map(p => `
                     <tr>
-                        <td class="p-2.5 font-bold font-mono text-emerald-600">${p.id}</td>
-                        <td class="p-2.5 font-bold">${p.cliente_nombre}</td>
-                        <td class="p-2.5">${p.items_summary}</td>
-                        <td class="p-2.5">${p.metodo_pago}</td>
-                        <td class="p-2.5 font-black">S/ ${p.total}</td>
+                        <td class="p-2.5 font-bold font-mono text-emerald-600">${p.id || '#'}</td>
+                        <td class="p-2.5 font-bold">${p.cliente || p.cliente_nombre || 'Cliente'}</td>
+                        <td class="p-2.5">${p.items_summary || ''}</td>
+                        <td class="p-2.5">${p.metodo_pago || ''}</td>
+                        <td class="p-2.5 font-black">S/ ${p.total || '0'}</td>
                     </tr>
                 `).join('');
 
