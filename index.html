@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LunchGo | Delivery de Comida Saludable</title>
+    <title>LunchGo | Come bien. Estudia mejor.</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -23,10 +23,10 @@
                         brand: {
                             50: '#f0fdf4',
                             100: '#dcfce7',
-                            400: '#4ade80',
-                            500: '#22c55e',
-                            600: '#16a34a',
-                            700: '#15803d',
+                            500: '#16a34a',
+                            600: '#15803d',
+                            700: '#166534',
+                            800: '#14532d',
                         }
                     }
                 }
@@ -36,21 +36,21 @@
     <style>
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #22c55e; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #16a34a; border-radius: 4px; }
     </style>
 </head>
-<body class="bg-slate-100 font-sans text-slate-800 antialiased min-h-screen flex flex-col selection:bg-brand-500 selection:text-white">
+<body class="bg-slate-100 font-sans text-slate-800 antialiased min-h-screen flex flex-col selection:bg-emerald-600 selection:text-white">
 
     <!-- HEADER / NAVBAR -->
-    <header class="bg-gradient-to-r from-emerald-600 via-green-600 to-lime-500 text-white sticky top-0 z-40 shadow-lg">
+    <header class="bg-gradient-to-r from-emerald-800 via-emerald-700 to-green-600 text-white sticky top-0 z-40 shadow-lg">
         <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
             <div class="flex items-center gap-3 cursor-pointer" onclick="irAPaso(1)">
-                <div class="w-11 h-11 bg-white text-emerald-600 rounded-2xl flex items-center justify-center font-extrabold text-2xl shadow-md transform hover:rotate-6 transition">
+                <div class="w-11 h-11 bg-white text-emerald-800 rounded-2xl flex items-center justify-center font-extrabold text-2xl shadow-md transform hover:rotate-6 transition">
                     <i class="fa-solid fa-bowl-food"></i>
                 </div>
                 <div>
                     <h1 class="text-2xl font-black tracking-tight leading-none text-white drop-shadow-sm">Lunch<span class="text-amber-300">Go</span></h1>
-                    <p class="text-[10px] text-emerald-100 font-bold uppercase tracking-wider">FIT & FRESH DELIVERY</p>
+                    <p class="text-[10px] text-emerald-100 font-bold uppercase tracking-wider mt-0.5">Come bien. Estudia mejor.</p>
                 </div>
             </div>
             
@@ -67,11 +67,11 @@
         <div class="max-w-3xl mx-auto px-4">
             <div class="flex justify-between items-center relative">
                 <div class="absolute top-1/2 left-0 w-full h-1 bg-slate-200 -translate-y-1/2 -z-0"></div>
-                <div id="progress-line" class="absolute top-1/2 left-0 h-1 bg-gradient-to-r from-emerald-500 to-lime-500 -translate-y-1/2 transition-all duration-300 -z-0" style="width: 0%;"></div>
+                <div id="progress-line" class="absolute top-1/2 left-0 h-1 bg-gradient-to-r from-emerald-600 to-green-500 -translate-y-1/2 transition-all duration-300 -z-0" style="width: 0%;"></div>
 
                 <div id="ind-step-1" class="relative z-10 flex flex-col items-center">
-                    <div class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-extrabold text-xs shadow-md transition-all">1</div>
-                    <span class="text-[11px] font-bold mt-1 text-emerald-700">Registro</span>
+                    <div class="w-8 h-8 rounded-full bg-emerald-700 text-white flex items-center justify-center font-extrabold text-xs shadow-md transition-all">1</div>
+                    <span class="text-[11px] font-bold mt-1 text-emerald-800">Registro</span>
                 </div>
                 <div id="ind-step-2" class="relative z-10 flex flex-col items-center opacity-40">
                     <div class="w-8 h-8 rounded-full bg-slate-300 text-slate-600 flex items-center justify-center font-extrabold text-xs transition-all">2</div>
@@ -95,61 +95,62 @@
         <!-- PASO 1: REGISTRO -->
         <section id="step-1" class="bg-white rounded-3xl p-6 md:p-8 shadow-md border border-emerald-100 max-w-2xl mx-auto">
             <div class="text-center mb-6">
-                <div class="w-14 h-14 bg-gradient-to-tr from-emerald-500 to-lime-400 text-white rounded-2xl flex items-center justify-center mx-auto mb-3 text-2xl shadow-md">
-                    <i class="fa-solid fa-address-card"></i>
+                <div class="w-14 h-14 bg-gradient-to-tr from-emerald-700 to-green-500 text-white rounded-2xl flex items-center justify-center mx-auto mb-3 text-2xl shadow-md">
+                    <i class="fa-solid fa-graduation-cap"></i>
                 </div>
-                <h2 class="text-2xl font-black text-slate-800">¡Bienvenido a LunchGo!</h2>
-                <p class="text-xs text-slate-500 mt-1">Ingresa tus datos personales para programar tu entrega saludable.</p>
+                <h2 class="text-2xl font-black text-slate-800">¡Alimentación Saludable para Estudiantes!</h2>
+                <p class="text-xs text-slate-500 mt-1">Almuerzos nutritivos, variados y accesibles puestos en tu instituto o universidad.</p>
             </div>
 
             <form id="form-cliente" onsubmit="guardarCliente(event)" class="space-y-4">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Nombres *</label>
-                        <input type="text" id="cli-nombres" required class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none text-sm font-medium" placeholder="Ej. Juan Carlos">
+                        <input type="text" id="cli-nombres" required class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 focus:outline-none text-sm font-medium" placeholder="Ej. Juan Carlos">
                     </div>
                     <div>
                         <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Apellidos *</label>
-                        <input type="text" id="cli-apellidos" required class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none text-sm font-medium" placeholder="Ej. Pérez Gómez">
+                        <input type="text" id="cli-apellidos" required class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 focus:outline-none text-sm font-medium" placeholder="Ej. Pérez Gómez">
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-bold uppercase text-slate-600 mb-1">DNI / Documento *</label>
-                        <input type="text" id="cli-dni" required maxlength="12" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none text-sm font-medium" placeholder="Ej. 74839201">
+                        <input type="text" id="cli-dni" required maxlength="12" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 focus:outline-none text-sm font-medium" placeholder="Ej. 74839201">
                     </div>
                     <div>
                         <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Teléfono / WhatsApp *</label>
-                        <input type="tel" id="cli-telefono" required class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none text-sm font-medium" placeholder="Ej. 987654321">
+                        <input type="tel" id="cli-telefono" required class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 focus:outline-none text-sm font-medium" placeholder="Ej. 912345678">
                     </div>
                 </div>
 
-                <div>
-                    <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Dirección Exacta de Entrega *</label>
-                    <input type="text" id="cli-direccion" required class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none text-sm font-medium" placeholder="Ej. Av. Primavera 123, Dpto 402, San Borja">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Instituto / Universidad *</label>
+                        <input type="text" id="cli-direccion" required class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 focus:outline-none text-sm font-medium" placeholder="Ej. Instituto Certus / UTP / Cibertec">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Punto / Aula / Referencia *</label>
+                        <input type="text" id="cli-referencia" required class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 focus:outline-none text-sm font-medium" placeholder="Ej. Puerta Principal / Pabellón B">
+                    </div>
                 </div>
 
-                <div>
-                    <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Referencia para el Delivery *</label>
-                    <input type="text" id="cli-referencia" required class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none text-sm font-medium" placeholder="Ej. Frente al parque principal, portón negro">
-                </div>
-
-                <button type="submit" id="btn-guardar-cliente" class="w-full bg-gradient-to-r from-emerald-500 to-lime-500 hover:from-emerald-600 hover:to-lime-600 text-white font-extrabold py-3.5 rounded-xl transition duration-200 shadow-md flex items-center justify-center gap-2 text-base mt-6">
-                    <span>Guardar Datos y Armar Menú</span>
+                <button type="submit" id="btn-guardar-cliente" class="w-full bg-gradient-to-r from-emerald-700 to-green-600 hover:opacity-95 text-white font-extrabold py-3.5 rounded-xl transition duration-200 shadow-md flex items-center justify-center gap-2 text-base mt-6">
+                    <span>Guardar Datos y Ver Menú Semanal</span>
                     <i class="fa-solid fa-arrow-right"></i>
                 </button>
             </form>
         </section>
 
-        <!-- PASO 2: PERSONALIZADOR Y MENÚ -->
+        <!-- PASO 2: MENÚ SEMANAL Y PERSONALIZADOR -->
         <section id="step-2" class="hidden space-y-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h2 class="text-2xl font-black text-slate-800">Personaliza tu Menú Saludable</h2>
-                    <p class="text-xs text-slate-500">Crea tu plato a la medida o elige entre las opciones recomendadas.</p>
+                    <h2 class="text-2xl font-black text-slate-800">Menú Semanal Nutritivo</h2>
+                    <p class="text-xs text-slate-500">7 Comidas nutritivas equilibradas y preparadas con ingredientes frescos.</p>
                 </div>
-                <div class="bg-gradient-to-r from-emerald-500 to-lime-500 text-white px-5 py-2.5 rounded-2xl flex items-center gap-3 shadow-md">
+                <div class="bg-gradient-to-r from-emerald-800 to-green-700 text-white px-5 py-2.5 rounded-2xl flex items-center gap-3 shadow-md">
                     <i class="fa-solid fa-basket-shopping text-xl text-amber-300"></i>
                     <div>
                         <span class="text-[10px] uppercase font-bold text-emerald-100 block">Mi Carrito:</span>
@@ -158,76 +159,91 @@
                 </div>
             </div>
 
-            <!-- BUILDER -->
+            <!-- PROMO LUNCHCOINS BANNER -->
+            <div class="bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-2xl p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-coins text-amber-200"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-extrabold text-sm">Plan Semanal LunchCoins (6 Almuerzos)</h4>
+                        <p class="text-xs text-amber-100">Obtén 1 comida diaria de Lunes a Sábado por solo <strong>S/ 69.90</strong>.</p>
+                    </div>
+                </div>
+                <button onclick="agregarPlanSemanal()" class="bg-white text-slate-800 hover:bg-amber-50 font-black px-4 py-2 rounded-xl text-xs transition shadow-xs whitespace-nowrap">
+                    <i class="fa-solid fa-plus text-amber-600"></i> Agregar Plan (S/ 69.90)
+                </button>
+            </div>
+
+            <!-- CATÁLOGO MENÚ SEMANAL -->
+            <div>
+                <h3 class="font-extrabold text-slate-800 text-lg mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-calendar-days text-emerald-700"></i> Menú de Lunes a Sábado:
+                </h3>
+                <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+            </div>
+
+            <!-- BUILDER PERSONALIZABLE -->
             <div class="bg-white rounded-3xl p-6 shadow-md border border-emerald-100">
                 <div class="flex items-center gap-2 mb-4 border-b border-slate-100 pb-3">
-                    <i class="fa-solid fa-utensils text-emerald-600 text-lg"></i>
-                    <h3 class="font-extrabold text-slate-800 text-base">Arma tu Bowl a la Medida (S/ 25.00)</h3>
+                    <i class="fa-solid fa-sliders text-emerald-700 text-lg"></i>
+                    <h3 class="font-extrabold text-slate-800 text-base">¿Prefieres Armar Tu Propio Bowl? (Desde S/ 12.90)</h3>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div>
-                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">1. Proteína Principal</label>
-                        <select id="builder-proteina" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs font-semibold focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-                            <option value="Pechuga a la Plancha (150g)">Pechuga a la Plancha (150g)</option>
-                            <option value="Filete de Salmón (+S/ 6.00)">Filete de Salmón (+S/ 6.00)</option>
-                            <option value="Atún Fresco Sellado (+S/ 4.00)">Atún Fresco Sellado (+S/ 4.00)</option>
-                            <option value="Tofu Marinado Orgánico">Tofu Marinado Orgánico</option>
-                            <option value="Carne Desmechada de Res">Carne Desmechada de Res</option>
+                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">1. Proteína Magra</label>
+                        <select id="builder-proteina" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs font-semibold focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                            <option value="Pollo a la Plancha (150g)">Pollo a la Plancha (150g)</option>
+                            <option value="Lomo Saltado de Res (+S/ 1.00)">Lomo Saltado de Res (+S/ 1.00)</option>
+                            <option value="Filete de Pescado al Horno (+S/ 1.00)">Filete de Pescado al Horno (+S/ 1.00)</option>
+                            <option value="Huevo Sancochado Doble">Huevo Sancochado Doble</option>
                         </select>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">2. Carbohidrato Base</label>
-                        <select id="builder-carbo" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs font-semibold focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-                            <option value="Quinoa Real Mixta">Quinoa Real Mixta</option>
+                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">2. Granos / Tubérculo</label>
+                        <select id="builder-carbo" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs font-semibold focus:ring-2 focus:ring-emerald-600 focus:outline-none">
                             <option value="Arroz Integral al Olivo">Arroz Integral al Olivo</option>
-                            <option value="Camote al Horno">Camote al Horno</option>
-                            <option value="Papa Nativa Dorada">Papa Nativa Dorada</option>
-                            <option value="Sin Carbohidrato (Extra Ensalada)">Sin Carbohidrato (Extra Ensalada)</option>
+                            <option value="Quinua Real Mixta">Quinua Real Mixta</option>
+                            <option value="Lentejas Nutritivas">Lentejas Nutritivas</option>
+                            <option value="Papa Dorada / Camote al Horno">Papa Dorada / Camote al Horno</option>
+                            <option value="Tallarines Integrales">Tallarines Integrales</option>
                         </select>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">3. Ensalada / Acompañamiento</label>
-                        <select id="builder-vegetales" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs font-semibold focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-                            <option value="Mix Verde + Palta + Tomate Cherry">Mix Verde + Palta + Tomate Cherry</option>
-                            <option value="Espárragos al Vapor + Zanahoria">Espárragos al Vapor + Zanahoria</option>
-                            <option value="Vainitas, Choclo & Edamame">Vainitas, Choclo & Edamame</option>
-                            <option value="Verduras Salteadas al Wok">Verduras Salteadas al Wok</option>
+                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">3. Verduras Frescas</label>
+                        <select id="builder-vegetales" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs font-semibold focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                            <option value="Ensalada Fresca (Tomate, Pepino, Lechuga)">Ensalada Fresca (Tomate, Pepino, Lechuga)</option>
+                            <option value="Verduras al Vapor (Brócoli, Zanahoria)">Verduras al Vapor (Brócoli, Zanahoria)</option>
+                            <option value="Salteado de Verduras & Cebolla">Salteado de Verduras & Cebolla</option>
                         </select>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">4. Salsa / Aderezo</label>
-                        <select id="builder-aderezo" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs font-semibold focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-                            <option value="Vinagreta Honey Mustard">Vinagreta Honey Mustard</option>
+                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">4. Aderezo / Aliño</label>
+                        <select id="builder-aderezo" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs font-semibold focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                            <option value="Vinagreta de Limón & Olivo">Vinagreta de Limón & Olivo</option>
                             <option value="Salsa Oriental Sésamo">Salsa Oriental Sésamo</option>
-                            <option value="Yogur Griego & Hierbas">Yogur Griego & Hierbas</option>
-                            <option value="Aceite de Oliva & Limón">Aceite de Oliva & Limón</option>
+                            <option value="Sin Aderezo">Sin Aderezo</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="mt-4 flex flex-col md:flex-row gap-3 items-center justify-between pt-3 border-t border-slate-100">
-                    <input type="text" id="builder-notas" class="w-full md:w-2/3 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Instrucciones especiales (ej. Poca sal, aderezo aparte, sin cebolla...)">
-                    <button onclick="agregarPlatoPersonalizado()" class="w-full md:w-auto bg-gradient-to-r from-emerald-600 to-lime-600 text-white font-extrabold px-6 py-2.5 rounded-xl text-xs hover:opacity-95 transition shadow-sm flex items-center justify-center gap-1.5">
-                        <i class="fa-solid fa-plus"></i> Agregar Plato Personalizado
+                    <input type="text" id="builder-notas" class="w-full md:w-2/3 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-emerald-600 focus:outline-none" placeholder="Indicaciones especiales (ej. Sin sal, llevar sin cebolla...)">
+                    <button onclick="agregarPlatoPersonalizado()" class="w-full md:w-auto bg-slate-800 text-white font-extrabold px-6 py-2.5 rounded-xl text-xs hover:bg-slate-900 transition shadow-sm flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-plus"></i> Agregar Bowl Personalizado
                     </button>
                 </div>
             </div>
 
-            <!-- CATÁLOGO PREDEFINIDO -->
-            <div>
-                <h3 class="font-extrabold text-slate-800 text-lg mb-4">O Sugerencias del Chef:</h3>
-                <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
-            </div>
-
             <div class="flex justify-between items-center bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
                 <button onclick="irAPaso(1)" class="px-5 py-2.5 border border-slate-300 rounded-xl font-bold text-slate-600 hover:bg-slate-100 transition text-xs flex items-center gap-2">
-                    <i class="fa-solid fa-arrow-left"></i> Modificar Datos
+                    <i class="fa-solid fa-arrow-left"></i> Cambiar Datos
                 </button>
-                <button onclick="validarYIrAResumen()" class="px-6 py-3 bg-gradient-to-r from-emerald-500 to-lime-500 text-white rounded-xl font-extrabold transition shadow-md flex items-center gap-2 text-sm hover:opacity-95">
+                <button onclick="validarYIrAResumen()" class="px-6 py-3 bg-gradient-to-r from-emerald-700 to-green-600 text-white rounded-xl font-extrabold transition shadow-md flex items-center gap-2 text-sm hover:opacity-95">
                     <span>Ver Resumen del Pedido</span>
                     <i class="fa-solid fa-chevron-right"></i>
                 </button>
@@ -238,34 +254,30 @@
         <section id="step-3" class="hidden max-w-3xl mx-auto">
             <div class="bg-white rounded-3xl p-6 md:p-8 shadow-md border border-slate-200">
                 <h2 class="text-2xl font-black text-slate-800 mb-1">Resumen del Pedido</h2>
-                <p class="text-xs text-slate-500 mb-6">Revisa el desglose de lo que vas a disfrutar.</p>
+                <p class="text-xs text-slate-500 mb-6">Revisa el desglose de tu pedido para tu jornada académica.</p>
 
                 <div id="resumen-items" class="space-y-4 mb-6 divide-y divide-slate-100"></div>
 
                 <div class="bg-slate-50 p-4 rounded-2xl space-y-2 border border-slate-200 text-xs">
                     <div class="flex justify-between text-slate-600">
-                        <span>Subtotal Platos</span>
+                        <span>Subtotal Menú</span>
                         <span id="costo-subtotal" class="font-bold">S/ 0.00</span>
                     </div>
                     <div class="flex justify-between text-slate-600">
-                        <span>Costo Delivery</span>
-                        <span id="costo-delivery" class="font-bold">S/ 7.00</span>
-                    </div>
-                    <div class="flex justify-between text-slate-600">
-                        <span>IGV (18% Incluido)</span>
-                        <span id="costo-igv" class="font-bold">S/ 0.00</span>
+                        <span>Costo Delivery Institucional</span>
+                        <span id="costo-delivery" class="font-bold">S/ 2.00</span>
                     </div>
                     <div class="border-t border-slate-300 pt-2 flex justify-between text-slate-900 font-black text-base">
                         <span>Total a Pagar</span>
-                        <span id="costo-total" class="text-emerald-600 text-lg">S/ 0.00</span>
+                        <span id="costo-total" class="text-emerald-700 text-lg">S/ 0.00</span>
                     </div>
                 </div>
 
                 <div class="mt-6 flex justify-between items-center">
                     <button onclick="irAPaso(2)" class="px-5 py-2.5 border border-slate-300 rounded-xl font-bold text-slate-600 hover:bg-slate-100 transition text-xs flex items-center gap-2">
-                        <i class="fa-solid fa-arrow-left"></i> Cambiar Menú
+                        <i class="fa-solid fa-arrow-left"></i> Modificar Selección
                     </button>
-                    <button onclick="irAPaso(4)" class="px-6 py-3 bg-gradient-to-r from-emerald-500 to-lime-500 text-white rounded-xl font-extrabold transition shadow-md flex items-center gap-2 text-sm hover:opacity-95">
+                    <button onclick="irAPaso(4)" class="px-6 py-3 bg-gradient-to-r from-emerald-700 to-green-600 text-white rounded-xl font-extrabold transition shadow-md flex items-center gap-2 text-sm hover:opacity-95">
                         <span>Ir a Formas de Pago</span>
                         <i class="fa-solid fa-credit-card"></i>
                     </button>
@@ -276,57 +288,57 @@
         <!-- PASO 4: PAGO -->
         <section id="step-4" class="hidden max-w-3xl mx-auto">
             <div class="bg-white rounded-3xl p-6 md:p-8 shadow-md border border-slate-200">
-                <h2 class="text-2xl font-black text-slate-800 mb-1">Método de Pago</h2>
-                <p class="text-xs text-slate-500 mb-6">Confirma los datos de envío y selecciona tu medio de pago.</p>
+                <h2 class="text-2xl font-black text-slate-800 mb-1">Confirmación y Pago</h2>
+                <p class="text-xs text-slate-500 mb-6">Confirma tu punto de entrega institucional y el medio de pago.</p>
 
-                <div class="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-4 mb-6">
+                <div class="bg-emerald-50/80 border border-emerald-200 rounded-2xl p-4 mb-6">
                     <div class="flex items-center justify-between mb-2">
-                        <span class="text-[10px] font-black text-emerald-800 uppercase tracking-wider"><i class="fa-solid fa-location-dot mr-1"></i> Punto de Entrega</span>
+                        <span class="text-[10px] font-black text-emerald-800 uppercase tracking-wider"><i class="fa-solid fa-location-dot mr-1"></i> Punto de Entrega Estudiantil</span>
                         <button onclick="irAPaso(1)" class="text-xs text-emerald-700 underline font-extrabold">Editar</button>
                     </div>
                     <p id="confirm-cliente-nombre" class="font-black text-slate-800 text-sm"></p>
-                    <p id="confirm-cliente-direccion" class="text-xs text-slate-600"></p>
+                    <p id="confirm-cliente-direccion" class="text-xs text-slate-700 font-bold"></p>
                     <p id="confirm-cliente-ref" class="text-xs text-slate-500 italic mt-0.5"></p>
                     <p id="confirm-cliente-tel" class="text-xs text-slate-600 font-semibold mt-1"></p>
                 </div>
 
                 <div class="mb-6">
-                    <label class="block text-xs font-bold uppercase text-slate-600 mb-3">Medio de Pago preferido *</label>
+                    <label class="block text-xs font-bold uppercase text-slate-600 mb-3">Medio de Pago *</label>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                        <label class="border-2 border-slate-200 rounded-2xl p-3.5 flex items-center gap-3 cursor-pointer hover:border-emerald-500 transition">
-                            <input type="radio" name="payment_method" value="Yape/Plin" checked class="text-emerald-600">
+                        <label class="border-2 border-slate-200 rounded-2xl p-3.5 flex items-center gap-3 cursor-pointer hover:border-emerald-600 transition">
+                            <input type="radio" name="payment_method" value="Yape/Plin (+51 912 345 678)" checked class="text-emerald-600">
                             <div>
                                 <span class="block font-bold text-xs text-slate-800">Yape / Plin</span>
-                                <span class="text-[10px] text-slate-400">Escanea o número</span>
+                                <span class="text-[10px] text-slate-400">+51 912 345 678</span>
                             </div>
                         </label>
-                        <label class="border-2 border-slate-200 rounded-2xl p-3.5 flex items-center gap-3 cursor-pointer hover:border-emerald-500 transition">
-                            <input type="radio" name="payment_method" value="Tarjeta POS" class="text-emerald-600">
-                            <div>
-                                <span class="block font-bold text-xs text-slate-800">Tarjeta Débito/Crédito</span>
-                                <span class="text-[10px] text-slate-400">POS en entrega</span>
-                            </div>
-                        </label>
-                        <label class="border-2 border-slate-200 rounded-2xl p-3.5 flex items-center gap-3 cursor-pointer hover:border-emerald-500 transition">
-                            <input type="radio" name="payment_method" value="Efectivo" class="text-emerald-600">
+                        <label class="border-2 border-slate-200 rounded-2xl p-3.5 flex items-center gap-3 cursor-pointer hover:border-emerald-600 transition">
+                            <input type="radio" name="payment_method" value="Efectivo Contra Entrega" class="text-emerald-600">
                             <div>
                                 <span class="block font-bold text-xs text-slate-800">Efectivo Exacto</span>
-                                <span class="text-[10px] text-slate-400">Pago contra entrega</span>
+                                <span class="text-[10px] text-slate-400">Contra entrega en campus</span>
+                            </div>
+                        </label>
+                        <label class="border-2 border-slate-200 rounded-2xl p-3.5 flex items-center gap-3 cursor-pointer hover:border-emerald-600 transition">
+                            <input type="radio" name="payment_method" value="Tarjeta POS" class="text-emerald-600">
+                            <div>
+                                <span class="block font-bold text-xs text-slate-800">Tarjeta POS</span>
+                                <span class="text-[10px] text-slate-400">Débito / Crédito</span>
                             </div>
                         </label>
                     </div>
                 </div>
 
                 <div class="flex items-center justify-between border-t border-slate-200 pt-4 mb-6">
-                    <span class="text-sm font-bold text-slate-700">Monto Final a Cancelar:</span>
-                    <span id="pago-monto-final" class="text-2xl font-black text-emerald-600">S/ 0.00</span>
+                    <span class="text-sm font-bold text-slate-700">Monto Total a Cancelar:</span>
+                    <span id="pago-monto-final" class="text-2xl font-black text-emerald-700">S/ 0.00</span>
                 </div>
 
                 <div class="flex justify-between items-center">
                     <button onclick="irAPaso(3)" class="px-5 py-2.5 border border-slate-300 rounded-xl font-bold text-slate-600 hover:bg-slate-100 transition text-xs">
                         Atrás
                     </button>
-                    <button id="btn-finalizar" onclick="procesarCompraFinal()" class="px-8 py-3.5 bg-gradient-to-r from-emerald-500 to-lime-500 hover:opacity-95 text-white rounded-xl font-black transition shadow-lg flex items-center gap-2 text-base">
+                    <button id="btn-finalizar" onclick="procesarCompraFinal()" class="px-8 py-3.5 bg-gradient-to-r from-emerald-700 to-green-600 hover:opacity-95 text-white rounded-xl font-black transition shadow-lg flex items-center gap-2 text-base">
                         <i class="fa-solid fa-circle-check"></i>
                         <span>Confirmar Mi Pedido</span>
                     </button>
@@ -334,15 +346,15 @@
             </div>
         </section>
 
-        <!-- PASO 5: RECIBO -->
+        <!-- PASO 5: RECIBO Y CONFIRMACIÓN WHATSAPP -->
         <section id="step-5" class="hidden max-w-lg mx-auto">
             <div class="bg-white rounded-3xl p-6 md:p-8 shadow-xl border border-slate-200 text-center relative overflow-hidden">
-                <div class="w-20 h-20 bg-gradient-to-tr from-emerald-500 to-lime-400 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-3xl shadow-lg">
+                <div class="w-20 h-20 bg-gradient-to-tr from-emerald-700 to-green-500 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-3xl shadow-lg">
                     <i class="fa-solid fa-circle-check"></i>
                 </div>
                 
-                <h2 class="text-3xl font-black text-slate-800 mb-1">¡Pedido Recibido!</h2>
-                <p class="text-xs text-slate-500 mb-6">Tu comida saludable ya está en proceso de preparación.</p>
+                <h2 class="text-3xl font-black text-slate-800 mb-1">¡Pedido Confirmado!</h2>
+                <p class="text-xs text-slate-500 mb-6">Tu comida saludable estará lista para tu horario académico.</p>
 
                 <div class="border-2 border-dashed border-slate-200 rounded-2xl p-5 text-left mb-6 bg-slate-50/60">
                     <div class="flex justify-between items-center border-b border-slate-200 pb-3 mb-3">
@@ -364,40 +376,45 @@
                             <span id="recibo-metodo" class="font-bold text-slate-700">Yape</span>
                         </div>
                         <div class="flex justify-between text-slate-500">
-                            <span>Cliente:</span>
+                            <span>Estudiante:</span>
                             <span id="recibo-cliente-nombre" class="font-bold text-slate-700">--</span>
                         </div>
                         <div class="flex justify-between text-slate-500">
-                            <span>Dirección:</span>
+                            <span>Lugar Entrega:</span>
                             <span id="recibo-cliente-dir" class="font-bold text-slate-700 truncate max-w-[180px]">--</span>
                         </div>
                         <div class="flex justify-between text-slate-900 font-black text-sm pt-2 border-t border-slate-200">
                             <span>TOTAL:</span>
-                            <span id="recibo-total" class="text-emerald-600">S/ 0.00</span>
+                            <span id="recibo-total" class="text-emerald-700">S/ 0.00</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="flex gap-3">
-                    <button onclick="window.print()" class="flex-1 py-3 border border-slate-300 rounded-xl font-bold text-slate-700 text-xs hover:bg-slate-100 transition">
-                        <i class="fa-solid fa-print mr-1"></i> Imprimir
+                <div class="flex flex-col gap-3">
+                    <button onclick="enviarWhatsAppDirecto()" class="w-full py-3.5 bg-green-600 hover:bg-green-700 text-white rounded-xl font-black text-sm transition flex items-center justify-center gap-2 shadow-md">
+                        <i class="fa-brands fa-whatsapp text-lg"></i> Confirmar vía WhatsApp Business
                     </button>
-                    <button onclick="reiniciarApp()" class="flex-1 py-3 bg-gradient-to-r from-emerald-500 to-lime-500 text-white rounded-xl font-black text-xs hover:opacity-95 transition">
-                        Nuevo Pedido
-                    </button>
+                    <div class="flex gap-3">
+                        <button onclick="window.print()" class="flex-1 py-2.5 border border-slate-300 rounded-xl font-bold text-slate-700 text-xs hover:bg-slate-100 transition">
+                            <i class="fa-solid fa-print mr-1"></i> Imprimir Ticket
+                        </button>
+                        <button onclick="reiniciarApp()" class="flex-1 py-2.5 bg-slate-800 text-white rounded-xl font-bold text-xs hover:bg-slate-900 transition">
+                            Nuevo Pedido
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>
 
     </main>
 
-    <!-- MODAL BASE DE DATOS PRIVADA (ADMIN) CON BOTONES DE EXPORTAR -->
+    <!-- MODAL BASE DE DATOS PRIVADA (ADMIN) CON EXPORTACIÓN EXCEL -->
     <div id="modal-database" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
             <div class="p-4 border-b border-slate-200 flex justify-between items-center bg-slate-800 text-white">
                 <div class="flex items-center gap-2">
                     <i class="fa-solid fa-database text-amber-400"></i>
-                    <h3 class="text-base font-black">Base de Datos Supabase (Privado)</h3>
+                    <h3 class="text-base font-black">Base de Datos Supabase (LunchGo Admin)</h3>
                 </div>
                 <button onclick="cerrarModalDatabase()" class="w-8 h-8 rounded-full bg-slate-700 hover:bg-slate-600 flex items-center justify-center text-white">
                     <i class="fa-solid fa-xmark"></i>
@@ -405,13 +422,13 @@
             </div>
 
             <div class="p-6 overflow-y-auto custom-scrollbar flex-grow space-y-6">
-                <!-- SECCIÓN CLIENTES -->
+                <!-- CLIENTES -->
                 <div>
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3">
                         <h4 class="font-extrabold text-sm text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
-                            <i class="fa-solid fa-users text-emerald-600"></i> Clientes Registrados (<span id="db-count-clientes">0</span>)
+                            <i class="fa-solid fa-users text-emerald-700"></i> Estudiantes / Clientes (<span id="db-count-clientes">0</span>)
                         </h4>
-                        <button onclick="exportarTablaExcel('clientes')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition">
+                        <button onclick="exportarTablaExcel('clientes')" class="bg-emerald-700 hover:bg-emerald-800 text-white px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition">
                             <i class="fa-solid fa-file-excel"></i> Exportar Clientes a Excel
                         </button>
                     </div>
@@ -424,7 +441,7 @@
                                     <th class="p-2.5 font-bold">Apellidos</th>
                                     <th class="p-2.5 font-bold">DNI</th>
                                     <th class="p-2.5 font-bold">Teléfono</th>
-                                    <th class="p-2.5 font-bold">Dirección / Referencia</th>
+                                    <th class="p-2.5 font-bold">Instituto / Campus</th>
                                 </tr>
                             </thead>
                             <tbody id="db-table-clientes" class="divide-y divide-slate-100 text-slate-600"></tbody>
@@ -432,7 +449,7 @@
                     </div>
                 </div>
 
-                <!-- SECCIÓN PEDIDOS -->
+                <!-- PEDIDOS -->
                 <div>
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3">
                         <h4 class="font-extrabold text-sm text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
@@ -474,10 +491,15 @@
 
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+        // CATÁLOGO OFICIAL LUNCHGO SEGÚN DOCUMENTO DE PRESENTACIÓN
         const CATALOGO_MENU = [
-            { id: 1, nombre: "Bowl Proteico LunchGo", basePrecio: 24.00, kcal: "450 kcal", desc: "Pechuga desmenuzada, quinoa real, palta fresca y aderezo especial.", img: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=600&q=80" },
-            { id: 2, nombre: "Salmón Grill & Espárragos", basePrecio: 32.00, kcal: "520 kcal", desc: "Filete de salmón fresco a la plancha, espárragos al vapor y arroz silvestre.", img: "https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=600&q=80" },
-            { id: 3, nombre: "Poke Bowl Atún Fresco", basePrecio: 28.00, kcal: "480 kcal", desc: "Atún marinada en soya ligera, palta, edamame y semillas de ajonjolí.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" }
+            { id: 1, dia: "LUNES", nombre: "Pollo a la plancha", basePrecio: 12.90, desc: "Con arroz integral y ensalada. Aporta proteínas y energía para iniciar la semana.", img: "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=600&q=80" },
+            { id: 2, dia: "MARTES", nombre: "Lomo saltado saludable", basePrecio: 13.50, desc: "Con arroz y verduras. Combina proteína de carne, carbohidratos y verduras.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" },
+            { id: 3, dia: "MIÉRCOLES", nombre: "Tallarines integrales con pollo", basePrecio: 12.90, desc: "Con verduras frescas. Pasta integral con proteína equilibrada.", img: "https://images.unsplash.com/photo-1621996346565-e3d5d6281288?auto=format&fit=crop&w=600&q=80" },
+            { id: 4, dia: "JUEVES", nombre: "Lentejas con arroz", basePrecio: 11.90, desc: "Con huevo y ensalada fresca. Ricas en fibra y proteína vegetal. Económica y nutritiva.", img: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80" },
+            { id: 5, dia: "VIERNES", nombre: "Pescado al horno", basePrecio: 13.50, desc: "Con papa dorada y ensalada. Alternativa ligera rica en grasas saludables.", img: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=600&q=80" },
+            { id: 6, dia: "SÁBADO", nombre: "Arroz chaufa saludable de pollo", basePrecio: 12.90, desc: "Con abundantes verduras. Opción juvenil y llena de proteínas y carbohidratos.", img: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=600&q=80" },
+            { id: 7, dia: "OPCIÓN ESPECIAL", nombre: "Pollo al horno con puré", basePrecio: 13.00, desc: "Con puré de papa, brócoli y zanahoria. Comida casera fácil de transportar.", img: "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=600&q=80" }
         ];
 
         let clienteActual = null;
@@ -500,8 +522,8 @@
                 if (ind) {
                     if (i <= paso) {
                         ind.classList.remove('opacity-40');
-                        ind.children[0].className = "w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-extrabold text-xs shadow-md transition-all";
-                        ind.children[1].className = "text-[11px] font-bold mt-1 text-emerald-700";
+                        ind.children[0].className = "w-8 h-8 rounded-full bg-emerald-700 text-white flex items-center justify-center font-extrabold text-xs shadow-md transition-all";
+                        ind.children[1].className = "text-[11px] font-bold mt-1 text-emerald-800";
                     } else {
                         ind.classList.add('opacity-40');
                         ind.children[0].className = "w-8 h-8 rounded-full bg-slate-300 text-slate-600 flex items-center justify-center font-extrabold text-xs transition-all";
@@ -548,7 +570,7 @@
             }
 
             btn.disabled = false;
-            btn.innerHTML = `<span>Guardar Datos y Armar Menú</span><i class="fa-solid fa-arrow-right"></i>`;
+            btn.innerHTML = `<span>Guardar Datos y Ver Menú Semanal</span><i class="fa-solid fa-arrow-right"></i>`;
             irAPaso(2);
         }
 
@@ -556,16 +578,16 @@
             const grid = document.getElementById('menu-grid');
             grid.innerHTML = CATALOGO_MENU.map(item => `
                 <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-200 flex flex-col hover:shadow-lg transition">
-                    <img src="${item.img}" alt="${item.nombre}" class="w-full h-40 object-cover">
+                    <div class="relative">
+                        <img src="${item.img}" alt="${item.nombre}" class="w-full h-36 object-cover">
+                        <span class="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-xs text-amber-300 text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider">${item.dia}</span>
+                    </div>
                     <div class="p-4 flex flex-col flex-grow">
-                        <div class="flex justify-between items-start mb-1">
-                            <h3 class="font-extrabold text-slate-800 text-sm leading-snug">${item.nombre}</h3>
-                            <span class="text-[10px] font-extrabold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">${item.kcal}</span>
-                        </div>
+                        <h3 class="font-extrabold text-slate-800 text-sm leading-snug mb-1">${item.nombre}</h3>
                         <p class="text-xs text-slate-500 mb-3 flex-grow">${item.desc}</p>
                         <div class="flex items-center justify-between border-t border-slate-100 pt-2">
                             <span class="font-black text-slate-800 text-base">S/ ${item.basePrecio.toFixed(2)}</span>
-                            <button onclick="agregarSugerencia(${item.id})" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs transition flex items-center gap-1">
+                            <button onclick="agregarSugerencia(${item.id})" class="px-3.5 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-xl text-xs transition flex items-center gap-1">
                                 <i class="fa-solid fa-plus"></i> Agregar
                             </button>
                         </div>
@@ -575,6 +597,16 @@
             actualizarContadorCarrito();
         }
 
+        function agregarPlanSemanal() {
+            carrito.push({
+                nombreBase: "Plan Semanal LunchCoins (6 Almuerzos)",
+                precioFinal: 69.90,
+                detalles: "1 Comida diaria de Lunes a Sábado con beneficio promocional"
+            });
+            actualizarContadorCarrito();
+            alert("¡Plan Semanal LunchCoins añadido al carrito!");
+        }
+
         function agregarPlatoPersonalizado() {
             const proteina = document.getElementById('builder-proteina').value;
             const carbo = document.getElementById('builder-carbo').value;
@@ -582,25 +614,24 @@
             const aderezo = document.getElementById('builder-aderezo').value;
             const notas = document.getElementById('builder-notas').value.trim();
 
-            let precio = 25.00;
-            if (proteina.includes('+S/ 6.00')) precio += 6;
-            if (proteina.includes('+S/ 4.00')) precio += 4;
+            let precio = 12.90;
+            if (proteina.includes('+S/ 1.00')) precio += 1;
 
             carrito.push({
                 nombreBase: "Bowl Personalizado LunchGo",
                 precioFinal: precio,
-                detalles: `Proteína: ${proteina} | Carbo: ${carbo} | Vegetales: ${vegetales} | Aderezo: ${aderezo}${notas ? ' | Nota: ' + notas : ''}`
+                detalles: `Proteína: ${proteina} | Base: ${carbo} | Verduras: ${vegetales} | Aderezo: ${aderezo}${notas ? ' | Nota: ' + notas : ''}`
             });
 
             document.getElementById('builder-notas').value = '';
             actualizarContadorCarrito();
-            alert("¡Bowl personalizado añadido al carrito!");
+            alert("¡Bowl personalizado añadido!");
         }
 
         function agregarSugerencia(id) {
             const item = CATALOGO_MENU.find(i => i.id === id);
             carrito.push({
-                nombreBase: item.nombre,
+                nombreBase: `${item.dia}: ${item.nombre}`,
                 precioFinal: item.basePrecio,
                 detalles: item.desc
             });
@@ -610,12 +641,12 @@
         function actualizarContadorCarrito() {
             const count = carrito.length;
             const total = carrito.reduce((s, i) => s + i.precioFinal, 0);
-            document.getElementById('cart-counter').innerText = `S/ ${total.toFixed(2)} (${count} platos)`;
+            document.getElementById('cart-counter').innerText = `S/ ${total.toFixed(2)} (${count} ítems)`;
         }
 
         function validarYIrAResumen() {
             if (carrito.length === 0) {
-                alert("Por favor arma o selecciona al menos un platillo.");
+                alert("Por favor elige al menos un almuerzo del menú semanal.");
                 return;
             }
             irAPaso(3);
@@ -637,12 +668,11 @@
             `).join('');
 
             const subtotal = carrito.reduce((s, i) => s + i.precioFinal, 0);
-            const delivery = 7.00;
+            const delivery = 2.00;
             const total = subtotal + delivery;
 
             document.getElementById('costo-subtotal').innerText = `S/ ${subtotal.toFixed(2)}`;
             document.getElementById('costo-delivery').innerText = `S/ ${delivery.toFixed(2)}`;
-            document.getElementById('costo-igv').innerText = `S/ ${(total * 0.18).toFixed(2)}`;
             document.getElementById('costo-total').innerText = `S/ ${total.toFixed(2)}`;
         }
 
@@ -660,11 +690,11 @@
             if (clienteActual) {
                 document.getElementById('confirm-cliente-nombre').innerText = `${clienteActual.nombres} ${clienteActual.apellidos}`;
                 document.getElementById('confirm-cliente-direccion').innerText = clienteActual.direccion;
-                document.getElementById('confirm-cliente-ref').innerText = `Ref: ${clienteActual.referencia}`;
+                document.getElementById('confirm-cliente-ref').innerText = `Punto / Aula: ${clienteActual.referencia}`;
                 document.getElementById('confirm-cliente-tel').innerText = `Tel: ${clienteActual.telefono}`;
             }
             const subtotal = carrito.reduce((s, i) => s + i.precioFinal, 0);
-            document.getElementById('pago-monto-final').innerText = `S/ ${(subtotal + 7.00).toFixed(2)}`;
+            document.getElementById('pago-monto-final').innerText = `S/ ${(subtotal + 2.00).toFixed(2)}`;
         }
 
         async function procesarCompraFinal() {
@@ -674,9 +704,8 @@
 
             const metodoPago = document.querySelector('input[name="payment_method"]:checked').value;
             const subtotal = carrito.reduce((s, i) => s + i.precioFinal, 0);
-            const delivery = 7.00;
+            const delivery = 2.00;
             const total = subtotal + delivery;
-            const igv = total * 0.18;
 
             const itemsJSON = carrito.map(item => ({
                 plato: item.nombreBase,
@@ -688,7 +717,7 @@
                 items: itemsJSON,
                 subtotal: subtotal,
                 delivery: delivery,
-                igv: Number(igv.toFixed(2))
+                igv: 0
             };
 
             if (clienteIdGuardado) {
@@ -700,10 +729,9 @@
 
                 if (error) {
                     console.error("Error guardando el pedido en Supabase:", error);
-                    alert("Atención: Ocurrió un detalle al registrar en BD: " + error.message);
                 }
             } catch (err) {
-                console.error("Error de red o ejecución:", err);
+                console.error("Error de ejecución:", err);
             }
 
             const numPedido = `#LG-${Math.floor(10000 + Math.random() * 90000)}`;
@@ -711,7 +739,7 @@
             document.getElementById('recibo-id').innerText = numPedido;
             document.getElementById('recibo-fecha').innerText = new Date().toLocaleString('es-PE');
             document.getElementById('recibo-metodo').innerText = metodoPago;
-            document.getElementById('recibo-cliente-nombre').innerText = clienteActual ? `${clienteActual.nombres} ${clienteActual.apellidos}` : 'Cliente';
+            document.getElementById('recibo-cliente-nombre').innerText = clienteActual ? `${clienteActual.nombres} ${clienteActual.apellidos}` : 'Estudiante';
             document.getElementById('recibo-cliente-dir').innerText = clienteActual ? clienteActual.direccion : '';
             document.getElementById('recibo-total').innerText = `S/ ${total.toFixed(2)}`;
 
@@ -723,14 +751,24 @@
                     </div>
                     <span class="font-bold text-slate-800">S/ ${i.precioFinal.toFixed(2)}</span>
                 </div>
-            `).join('') + `<div class="flex justify-between font-medium text-slate-500 pt-1"><span>Costo Delivery</span><span>S/ 7.00</span></div>`;
+            `).join('') + `<div class="flex justify-between font-medium text-slate-500 pt-1"><span>Delivery Institucional</span><span>S/ 2.00</span></div>`;
 
             irAPaso(5);
             confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
         }
 
+        function enviarWhatsAppDirecto() {
+            const numPedido = document.getElementById('recibo-id').innerText;
+            const total = document.getElementById('recibo-total').innerText;
+            const items = carrito.map(i => `• ${i.nombreBase}`).join('\n');
+
+            const msg = `¡Hola LunchGo! 🥗 Quisiera confirmar mi pedido ${numPedido}:\n\n*Cliente:* ${clienteActual.nombres} ${clienteActual.apellidos}\n*Lugar:* ${clienteActual.direccion} (${clienteActual.referencia})\n\n*Detalle del menú:*\n${items}\n\n*Total a pagar:* ${total}\n\n¡Quedo a la espera de la entrega en mi centro de estudios!`;
+
+            window.open(`https://wa.me/51912345678?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
         async function solicitarAccesoAdmin() {
-            const pass = prompt("Acceso Privado. Ingresa tu clave de Administradora:");
+            const pass = prompt("Acceso Privado Administradora:");
             if (pass === CLAVE_ADMIN) {
                 const { data: clientes } = await supabaseClient.from('clientes').select('*');
                 const { data: pedidos } = await supabaseClient.from('pedidos').select('*');
@@ -753,7 +791,7 @@
                 const tblPedidos = document.getElementById('db-table-pedidos');
                 tblPedidos.innerHTML = (pedidos || []).map(p => `
                     <tr>
-                        <td class="p-2.5 font-bold font-mono text-emerald-600">${p.id || '#'}</td>
+                        <td class="p-2.5 font-bold font-mono text-emerald-700">${p.id || '#'}</td>
                         <td class="p-2.5 font-bold font-mono">${p.cliente_id || '-'}</td>
                         <td class="p-2.5 font-mono text-[10px] max-w-[250px] truncate">${JSON.stringify(p.items || [])}</td>
                         <td class="p-2.5 font-black">S/ ${( (p.subtotal || 0) + (p.delivery || 0) ).toFixed(2)}</td>
@@ -766,7 +804,6 @@
             }
         }
 
-        // FUNCIÓN DE EXPORTACIÓN A EXCEL (.XLSX)
         async function exportarTablaExcel(nombreTabla) {
             try {
                 const { data, error } = await supabaseClient.from(nombreTabla).select('*');
@@ -777,7 +814,7 @@
                 }
 
                 if (!data || data.length === 0) {
-                    alert("No hay registros en la tabla '" + nombreTabla + "' para exportar.");
+                    alert("No hay registros para exportar en " + nombreTabla);
                     return;
                 }
 
@@ -798,7 +835,7 @@
                 XLSX.writeFile(libro, `Reporte_${nombreTabla}_LunchGo.xlsx`);
             } catch (err) {
                 console.error("Error exportando a Excel:", err);
-                alert("Ocurrió un problema al generar el archivo Excel.");
+                alert("Error al generar el Excel.");
             }
         }
 
