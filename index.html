@@ -133,7 +133,7 @@
                     <input type="text" id="cli-referencia" required class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none text-sm font-medium" placeholder="Ej. Frente al parque principal, portón negro">
                 </div>
 
-                <button type="submit" class="w-full bg-gradient-to-r from-emerald-500 to-lime-500 hover:from-emerald-600 hover:to-lime-600 text-white font-extrabold py-3.5 rounded-xl transition duration-200 shadow-md flex items-center justify-center gap-2 text-base mt-6">
+                <button type="submit" id="btn-guardar-cliente" class="w-full bg-gradient-to-r from-emerald-500 to-lime-500 hover:from-emerald-600 hover:to-lime-600 text-white font-extrabold py-3.5 rounded-xl transition duration-200 shadow-md flex items-center justify-center gap-2 text-base mt-6">
                     <span>Guardar Datos y Elegir Comida</span>
                     <i class="fa-solid fa-arrow-right"></i>
                 </button>
@@ -326,6 +326,50 @@
 
     </main>
 
+    <!-- MODAL PERSONALIZACIÓN DE PLATO -->
+    <div id="modal-custom-plate" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative">
+            <button onclick="cerrarModalCustom()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center font-bold">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <h3 id="custom-plate-title" class="text-xl font-black text-slate-800 mb-1">Personalizar Plato</h3>
+            <p class="text-xs text-slate-500 mb-4">Ajusta los ingredientes a tu gusto de nutrición.</p>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Añadir Proteína Extra</label>
+                    <select id="custom-proteina" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs font-semibold focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                        <option value="Sin extra (+S/ 0.00)">Sin extra (+S/ 0.00)</option>
+                        <option value="Pechuga Grill Extra (+S/ 5.00)">Pechuga Grill Extra (+S/ 5.00)</option>
+                        <option value="Salmón Grill Extra (+S/ 9.00)">Salmón Grill Extra (+S/ 9.00)</option>
+                        <option value="Atún Fresco Extra (+S/ 7.00)">Atún Fresco Extra (+S/ 7.00)</option>
+                        <option value="Tofu Marinado Extra (+S/ 4.00)">Tofu Marinado Extra (+S/ 4.00)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Seleccionar Aderezo</label>
+                    <select id="custom-aderezo" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs font-semibold focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                        <option value="Vinagreta Honey Mustard">Vinagreta Honey Mustard</option>
+                        <option value="Salsa Oriental Sésamo">Salsa Oriental Sésamo</option>
+                        <option value="Aderezo Yogur & Hierbas">Aderezo Yogur & Hierbas</option>
+                        <option value="Sin Aderezo / Limón Aparte">Sin Aderezo / Limón Aparte</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Notas / Exclusiones</label>
+                    <textarea id="custom-notas" rows="2" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Ej. Sin cebolla, aderezo aparte, poca sal..."></textarea>
+                </div>
+            </div>
+
+            <button onclick="confirmarPersonalizacion()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3 rounded-xl transition shadow-md text-xs uppercase mt-6">
+                Añadir al Pedido
+            </button>
+        </div>
+    </div>
+
     <!-- MODAL BASE DE DATOS PRIVADA (SOLO ADMINISTRADOR) -->
     <div id="modal-database" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
@@ -351,7 +395,6 @@
                         <table class="w-full text-left border-collapse text-xs">
                             <thead>
                                 <tr class="bg-slate-100 text-slate-700 border-b border-slate-200">
-                                    <th class="p-2.5 font-bold">Fecha/Hora</th>
                                     <th class="p-2.5 font-bold">Nombre Completo</th>
                                     <th class="p-2.5 font-bold">DNI</th>
                                     <th class="p-2.5 font-bold">Teléfono</th>
@@ -375,7 +418,6 @@
                             <thead>
                                 <tr class="bg-slate-100 text-slate-700 border-b border-slate-200">
                                     <th class="p-2.5 font-bold">ID</th>
-                                    <th class="p-2.5 font-bold">Fecha</th>
                                     <th class="p-2.5 font-bold">Cliente</th>
                                     <th class="p-2.5 font-bold">Items Comprados</th>
                                     <th class="p-2.5 font-bold">Medio Pago</th>
@@ -398,7 +440,6 @@
 
     <!-- LOGICA JAVASCRIPT -->
     <script>
-        // CREDENCIALES CONFIGURADAS DIRECTAMENTE
         const SUPABASE_URL = "https://siysayzprwebprqophgr.supabase.co";
         const SUPABASE_KEY = "sb_publishable_L6ysgw5hP0bs9EsyJr2IiQ_5GQwiI4-";
         const CLAVE_ADMIN = "admin123";
@@ -413,6 +454,7 @@
 
         let clienteActual = null;
         let carrito = [];
+        let itemEnPersonalizacion = null;
 
         function irAPaso(paso) {
             for (let i = 1; i <= 5; i++) {
@@ -447,9 +489,11 @@
 
         async function guardarCliente(e) {
             e.preventDefault();
+            const btn = document.getElementById('btn-guardar-cliente');
+            btn.disabled = true;
+            btn.innerText = "Guardando...";
+
             const clienteObj = {
-                id: Date.now(),
-                fecha_hora: new Date().toLocaleString('es-PE'),
                 nombres: document.getElementById('cli-nombres').value.trim(),
                 apellidos: document.getElementById('cli-apellidos').value.trim(),
                 dni: document.getElementById('cli-dni').value.trim(),
@@ -463,9 +507,11 @@
             try {
                 await supabaseClient.from('clientes').insert([clienteObj]);
             } catch (err) {
-                console.error("Error al registrar cliente:", err);
+                console.error("Error al registrar cliente en Supabase:", err);
             }
 
+            btn.disabled = false;
+            btn.innerHTML = `<span>Guardar Datos y Elegir Comida</span><i class="fa-solid fa-arrow-right"></i>`;
             irAPaso(2);
         }
 
@@ -482,8 +528,8 @@
                         <p class="text-xs text-slate-500 mb-4 flex-grow">${item.desc}</p>
                         <div class="flex items-center justify-between border-t border-slate-100 pt-3">
                             <span class="font-black text-slate-800 text-lg">S/ ${item.basePrecio.toFixed(2)}</span>
-                            <button onclick="agregarAlCarrito(${item.id})" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs transition shadow-sm flex items-center gap-1.5">
-                                <i class="fa-solid fa-plus"></i> Agregar
+                            <button onclick="abrirModalCustom(${item.id})" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs transition shadow-sm flex items-center gap-1.5">
+                                <i class="fa-solid fa-sliders"></i> Personalizar
                             </button>
                         </div>
                     </div>
@@ -492,12 +538,42 @@
             actualizarContadorCarrito();
         }
 
-        function agregarAlCarrito(id) {
-            const item = CATALOGO_MENU.find(i => i.id === id);
-            carrito.push({
-                nombreBase: item.nombre,
-                precioFinal: item.basePrecio
-            });
+        function abrirModalCustom(id) {
+            itemEnPersonalizacion = CATALOGO_MENU.find(i => i.id === id);
+            document.getElementById('custom-plate-title').innerText = itemEnPersonalizacion.nombre;
+            document.getElementById('custom-proteina').selectedIndex = 0;
+            document.getElementById('custom-aderezo').selectedIndex = 0;
+            document.getElementById('custom-notas').value = '';
+            document.getElementById('modal-custom-plate').classList.remove('hidden');
+        }
+
+        function cerrarModalCustom() {
+            document.getElementById('modal-custom-plate').classList.add('hidden');
+        }
+
+        function confirmarPersonalizacion() {
+            if (!itemEnPersonalizacion) return;
+
+            const proteinaVal = document.getElementById('custom-proteina').value;
+            const aderezoVal = document.getElementById('custom-aderezo').value;
+            const notasVal = document.getElementById('custom-notas').value.trim();
+
+            let extraPrecio = 0;
+            if (proteinaVal.includes('+S/ 5.00')) extraPrecio = 5;
+            if (proteinaVal.includes('+S/ 9.00')) extraPrecio = 9;
+            if (proteinaVal.includes('+S/ 7.00')) extraPrecio = 7;
+            if (proteinaVal.includes('+S/ 4.00')) extraPrecio = 4;
+
+            const itemCarrito = {
+                nombreBase: itemEnPersonalizacion.nombre,
+                precioFinal: itemEnPersonalizacion.basePrecio + extraPrecio,
+                proteina: proteinaVal,
+                aderezo: aderezoVal,
+                notas: notasVal
+            };
+
+            carrito.push(itemCarrito);
+            cerrarModalCustom();
             actualizarContadorCarrito();
         }
 
@@ -509,7 +585,7 @@
 
         function validarYIrAResumen() {
             if (carrito.length === 0) {
-                alert("Por favor selecciona al menos un platillo.");
+                alert("Por favor personaliza y agrega al menos un platillo.");
                 return;
             }
             irAPaso(3);
@@ -518,10 +594,12 @@
         function renderizarResumen() {
             const contenedor = document.getElementById('resumen-items');
             contenedor.innerHTML = carrito.map((item, idx) => `
-                <div class="flex justify-between items-center pt-3">
+                <div class="flex justify-between items-start pt-3">
                     <div>
                         <p class="font-bold text-slate-800 text-sm">${item.nombreBase}</p>
-                        <p class="text-[10px] text-slate-400">Plato Gourmet Fit</p>
+                        <p class="text-[11px] text-emerald-700 font-semibold">• ${item.proteina}</p>
+                        <p class="text-[11px] text-slate-500">• ${item.aderezo}</p>
+                        ${item.notas ? `<p class="text-[10px] text-amber-700 bg-amber-50 px-2 py-0.5 rounded mt-1">Nota: "${item.notas}"</p>` : ''}
                     </div>
                     <div class="flex items-center gap-3">
                         <span class="font-black text-slate-800 text-sm">S/ ${item.precioFinal.toFixed(2)}</span>
@@ -570,13 +648,13 @@
             const subtotal = carrito.reduce((s, i) => s + i.precioFinal, 0);
             const total = subtotal + 7.00;
             const numPedido = `#LG-${Math.floor(10000 + Math.random() * 90000)}`;
-            const fechaHora = new Date().toLocaleString('es-PE');
+
+            const resumenText = carrito.map(i => `${i.nombreBase} [Extra: ${i.proteina}, Aderezo: ${i.aderezo}${i.notas ? ', Nota: ' + i.notas : ''}]`).join(' | ');
 
             const pedidoObj = {
                 id: numPedido,
-                fecha_hora: fechaHora,
                 cliente_nombre: clienteActual ? `${clienteActual.nombres} ${clienteActual.apellidos}` : 'Cliente',
-                items_summary: carrito.map(i => i.nombreBase).join(', '),
+                items_summary: resumenText,
                 metodo_pago: metodoPago,
                 total: total
             };
@@ -584,22 +662,25 @@
             try {
                 await supabaseClient.from('pedidos').insert([pedidoObj]);
             } catch (err) {
-                console.error("Error registrando pedido:", err);
+                console.error("Error registrando pedido en Supabase:", err);
             }
 
             document.getElementById('recibo-id').innerText = numPedido;
-            document.getElementById('recibo-fecha').innerText = fechaHora;
+            document.getElementById('recibo-fecha').innerText = new Date().toLocaleString('es-PE');
             document.getElementById('recibo-metodo').innerText = metodoPago;
             document.getElementById('recibo-cliente-nombre').innerText = `${clienteActual.nombres} ${clienteActual.apellidos}`;
             document.getElementById('recibo-cliente-dir').innerText = clienteActual.direccion;
             document.getElementById('recibo-total').innerText = `S/ ${total.toFixed(2)}`;
 
             document.getElementById('recibo-items-list').innerHTML = carrito.map(i => `
-                <div class="flex justify-between">
-                    <span>${i.nombreBase}</span>
-                    <span class="font-bold">S/ ${i.precioFinal.toFixed(2)}</span>
+                <div class="flex justify-between border-b border-slate-100 pb-1">
+                    <div>
+                        <span class="font-bold text-slate-800 block">${i.nombreBase}</span>
+                        <span class="text-[10px] text-slate-400 block">${i.proteina}</span>
+                    </div>
+                    <span class="font-bold text-slate-800">S/ ${i.precioFinal.toFixed(2)}</span>
                 </div>
-            `).join('') + `<div class="flex justify-between font-medium text-slate-500"><span>Costo Delivery</span><span>S/ 7.00</span></div>`;
+            `).join('') + `<div class="flex justify-between font-medium text-slate-500 pt-1"><span>Costo Delivery</span><span>S/ 7.00</span></div>`;
 
             irAPaso(5);
             confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
@@ -617,7 +698,6 @@
                 const tblClientes = document.getElementById('db-table-clientes');
                 tblClientes.innerHTML = (clientes || []).map(c => `
                     <tr>
-                        <td class="p-2.5 font-mono">${c.fecha_hora || ''}</td>
                         <td class="p-2.5 font-bold">${c.nombres || ''} ${c.apellidos || ''}</td>
                         <td class="p-2.5">${c.dni || ''}</td>
                         <td class="p-2.5">${c.telefono || ''}</td>
@@ -629,7 +709,6 @@
                 tblPedidos.innerHTML = (pedidos || []).map(p => `
                     <tr>
                         <td class="p-2.5 font-bold font-mono text-emerald-600">${p.id}</td>
-                        <td class="p-2.5 font-mono">${p.fecha_hora}</td>
                         <td class="p-2.5 font-bold">${p.cliente_nombre}</td>
                         <td class="p-2.5">${p.items_summary}</td>
                         <td class="p-2.5">${p.metodo_pago}</td>
