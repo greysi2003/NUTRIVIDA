@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriVida | Delivery de Comida Saludable</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            accent: '#f97316',
+                            accentHover: '#ea580c',
+                            lime: '#84cc16'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Canvas Confetti para efecto de compra exitosa -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+        .step-active {
+            color: #16a34a;
+            border-color: #16a34a;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="h-full flex flex-col font-sans text-slate-800 antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- Banner superior de estado Supabase y Configuración -->
+    <header class="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- LOGO -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="app.goToStep(1)">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-brand-lime flex items-center justify-center text-white shadow-md shadow-brand-500/20">
+                        <i class="fa-solid fa-leaf text-xl"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-bold bg-gradient-to-r from-brand-700 to-brand-accent bg-clip-text text-transparent">NutriVida</span>
+                        <span class="text-xs block text-slate-500 font-medium tracking-wide">FIT & FRESH DELIVERY</span>
+                    </div>
+                </div>
+
+                <!-- SUPABASE BADGE & SETTINGS BUTTON -->
+                <div class="flex items-center space-x-3">
+                    <button id="supabaseStatusBtn" onclick="app.toggleConfigModal()" class="flex items-center space-x-2 text-xs px-3 py-1.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 transition-colors">
+                        <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse" id="statusDot"></span>
+                        <span id="statusText" class="font-medium">Modo Demo Local</span>
+                        <i class="fa-solid fa-gear ml-1"></i>
+                    </button>
+                    <button onclick="app.toggleSqlModal()" class="text-slate-600 hover:text-brand-600 p-2 rounded-lg hover:bg-slate-100 text-sm font-medium transition" title="Ver Script SQL para Supabase">
+                        <i class="fa-solid fa-database"></i> SQL Supabase
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROGRESS BAR STEPS -->
+        <div class="bg-slate-50 border-t border-slate-100 py-3">
+            <div class="max-w-4xl mx-auto px-4">
+                <div class="flex justify-between items-center text-xs sm:text-sm font-medium">
+                    <!-- Step 1 -->
+                    <div id="stepNav1" class="flex flex-col sm:flex-row items-center space-y-1 sm:space-y-0 sm:space-x-2 text-brand-600 font-bold">
+                        <span class="w-7 h-7 rounded-full bg-brand-600 text-white flex items-center justify-center text-xs">1</span>
+                        <span>1. Registro</span>
+                    </div>
+                    <div class="flex-1 mx-2 h-0.5 bg-slate-200" id="line1"></div>
+                    <!-- Step 2 -->
+                    <div id="stepNav2" class="flex flex-col sm:flex-row items-center space-y-1 sm:space-y-0 sm:space-x-2 text-slate-400">
+                        <span class="w-7 h-7 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs" id="badge2">2</span>
+                        <span>2. Menú & Personalización</span>
+                    </div>
+                    <div class="flex-1 mx-2 h-0.5 bg-slate-200" id="line2"></div>
+                    <!-- Step 3 -->
+                    <div id="stepNav3" class="flex flex-col sm:flex-row items-center space-y-1 sm:space-y-0 sm:space-x-2 text-slate-400">
+                        <span class="w-7 h-7 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs" id="badge3">3</span>
+                        <span>3. Resumen</span>
+                    </div>
+                    <div class="flex-1 mx-2 h-0.5 bg-slate-200" id="line3"></div>
+                    <!-- Step 4 -->
+                    <div id="stepNav4" class="flex flex-col sm:flex-row items-center space-y-1 sm:space-y-0 sm:space-x-2 text-slate-400">
+                        <span class="w-7 h-7 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs" id="badge4">4</span>
+                        <span>4. Pago y Envío</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+
+        <!-- PASO 1: SUSCRIPCIÓN / REGISTRO DE CLIENTE -->
+        <section id="step1View" class="max-w-2xl mx-auto">
+            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100">
+                <div class="text-center mb-8">
+                    <span class="inline-block p-3 rounded-2xl bg-brand-50 text-brand-600 mb-3">
+                        <i class="fa-solid fa-user-plus text-2xl"></i>
+                    </span>
+                    <h2 class="text-2xl font-bold text-slate-800">¡Bienvenido a NutriVida!</h2>
+                    <p class="text-slate-500 text-sm mt-1">Ingresa tus datos para registrar la dirección de envío de tus comidas saludables.</p>
+                </div>
+
+                <form id="customerForm" onsubmit="app.handleCustomerSubmit(event)" class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Nombres *</label>
+                            <input type="text" id="regNombre" required placeholder="Ej. Juan Carlos" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Apellidos *</label>
+                            <input type="text" id="regApellido" required placeholder="Ej. Pérez Gómez" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition text-sm">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">DNI / Documento *</label>
+                            <input type="text" id="regDni" required pattern="[0-9]{8,11}" maxlength="11" placeholder="Ej. 74839201" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Teléfono / WhatsApp *</label>
+                            <input type="tel" id="regTelefono" required placeholder="Ej. 987654321" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition text-sm">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Dirección Exacta de Entrega *</label>
+                        <input type="text" id="regDireccion" required placeholder="Ej. Av. Primavera 123, Dpto 402, San Borja" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition text-sm">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Referencia para el Delivery *</label>
+                        <input type="text" id="regReferencia" required placeholder="Ej. Frente al parque principal, portón negro" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition text-sm">
+                    </div>
+
+                    <button type="submit" class="w-full mt-6 bg-gradient-to-r from-brand-600 to-brand-500 text-white font-bold py-3.5 px-6 rounded-xl shadow-lg shadow-brand-500/30 hover:from-brand-700 hover:to-brand-600 transition duration-200 flex items-center justify-center space-x-2">
+                        <span>Guardar Datos y Ver Menú</span>
+                        <i class="fa-solid fa-arrow-right text-sm"></i>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- PASO 2: MENÚ DE 10 PLATILLOS SALUDABLES & ARMADO DE PLATILLO -->
+        <section id="step2View" class="hidden">
+            <div class="flex flex-col lg:flex-row gap-8">
+                <!-- Columna Izquierda: Grid de Platillos -->
+                <div class="flex-1">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 pb-4 border-b border-slate-200 gap-4">
+                        <div>
+                            <h2 class="text-2xl font-bold text-slate-800">Menú Saludable Gourmet</h2>
+                            <p class="text-slate-500 text-sm">Selecciona tus platillos preferidos y personalízalos a tu gusto.</p>
+                        </div>
+                        <span class="px-3 py-1 rounded-full bg-brand-100 text-brand-700 text-xs font-semibold">10 Opciones Disponibles</span>
+                    </div>
+
+                    <!-- Grid de 10 comidas -->
+                    <div id="menuGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Carga dinámica JS -->
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Resumen Flotante del Carrito -->
+                <div class="w-full lg:w-80">
+                    <div class="sticky top-24 bg-white rounded-2xl p-5 border border-slate-200 shadow-xl shadow-slate-200/40">
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+                            <h3 class="font-bold text-slate-800 flex items-center space-x-2">
+                                <i class="fa-solid fa-basket-shopping text-brand-600"></i>
+                                <span>Tu Pedido</span>
+                            </h3>
+                            <span id="cartBadgeCount" class="bg-brand-600 text-white text-xs font-bold px-2.5 py-0.5 rounded-full">0 items</span>
+                        </div>
+
+                        <!-- Lista vacía o items del carrito -->
+                        <div id="cartItemsContainer" class="space-y-3 max-h-60 overflow-y-auto pr-1 text-sm">
+                            <div class="text-center py-8 text-slate-400">
+                                <i class="fa-solid fa-utensils text-3xl mb-2"></i>
+                                <p class="text-xs">Aún no has agregado ninguna comida a tu lista.</p>
+                            </div>
+                        </div>
+
+                        <!-- Totales rápido -->
+                        <div class="mt-4 pt-4 border-t border-slate-100 space-y-2">
+                            <div class="flex justify-between text-xs text-slate-500">
+                                <span>Subtotal</span>
+                                <span id="cartSubtotal">S/ 0.00</span>
+                            </div>
+                            <div class="flex justify-between text-xs text-slate-500">
+                                <span>Costo Delivery</span>
+                                <span id="cartDelivery">S/ 7.00</span>
+                            </div>
+                            <div class="flex justify-between text-base font-bold text-slate-800 pt-2 border-t border-slate-100">
+                                <span>Total Est.</span>
+                                <span id="cartTotal" class="text-brand-600">S/ 0.00</span>
+                            </div>
+                        </div>
+
+                        <button id="btnContinueToStep3" onclick="app.goToStep(3)" disabled class="w-full mt-5 bg-brand-600 hover:bg-brand-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl transition shadow-md shadow-brand-500/20 flex items-center justify-center space-x-2">
+                            <span>Siguiente: Ver Resumen</span>
+                            <i class="fa-solid fa-chevron-right text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PASO 3: RESUMEN DE SELECCIÓN Y COSTOS -->
+        <section id="step3View" class="hidden max-w-4xl mx-auto">
+            <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 p-6 sm:p-8">
+                <div class="flex items-center justify-between pb-6 border-b border-slate-200 mb-6">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-800">Resumen de tu Pedido</h2>
+                        <p class="text-slate-500 text-sm">Verifica los platillos seleccionados e ingredientes configurados.</p>
+                    </div>
+                    <button onclick="app.goToStep(2)" class="text-xs font-semibold text-brand-600 hover:text-brand-700 bg-brand-50 px-3 py-2 rounded-xl transition">
+                        <i class="fa-solid fa-plus text-xs mr-1"></i> Agregar Más Platos
+                    </button>
+                </div>
+
+                <!-- Detalle de Platos -->
+                <div id="step3CartList" class="space-y-4 mb-8">
+                    <!-- Dinámico -->
+                </div>
+
+                <!-- Desglose de Costos -->
+                <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200/80 max-w-md ml-auto space-y-3">
+                    <h3 class="font-bold text-slate-800 text-sm uppercase tracking-wider mb-2 border-b border-slate-200 pb-2">Desglose Financiero</h3>
+                    <div class="flex justify-between text-sm text-slate-600">
+                        <span>Subtotal Comidas</span>
+                        <span id="summarySubtotal" class="font-semibold">S/ 0.00</span>
+                    </div>
+                    <div class="flex justify-between text-sm text-slate-600">
+                        <span>Envío / Delivery Saludable</span>
+                        <span id="summaryDelivery" class="font-semibold">S/ 7.00</span>
+                    </div>
+                    <div class="flex justify-between text-xs text-slate-400">
+                        <span>Incluye IGV (18%)</span>
+                        <span id="summaryIgv">S/ 0.00</span>
+                    </div>
+                    <div class="flex justify-between text-lg font-extrabold text-slate-800 pt-3 border-t border-slate-300">
+                        <span>Monto Total a Pagar</span>
+                        <span id="summaryTotal" class="text-brand-600">S/ 0.00</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between mt-8 pt-6 border-t border-slate-200">
+                    <button onclick="app.goToStep(2)" class="px-6 py-2.5 rounded-xl border border-slate-200 text-slate-600 font-bold hover:bg-slate-50 transition text-sm">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Volver al Menú
+                    </button>
+                    <button onclick="app.goToStep(4)" class="px-8 py-3 rounded-xl bg-brand-600 text-white font-bold hover:bg-brand-700 shadow-lg shadow-brand-500/20 transition text-sm">
+                        Ir al Pago y Confirmación <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PASO 4: PAGO, MEDIOS Y DIRECCIÓN -->
+        <section id="step4View" class="hidden max-w-4xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+                <!-- Columna Izquierda: Datos del cliente y Selección de Pago -->
+                <div class="md:col-span-7 space-y-6">
+                    <!-- Verificación de Dirección -->
+                    <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-xl shadow-slate-200/50">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-slate-800 flex items-center space-x-2">
+                                <i class="fa-solid fa-location-dot text-brand-600"></i>
+                                <span>Dirección de Envío</span>
+                            </h3>
+                            <button onclick="app.goToStep(1)" class="text-xs text-brand-600 font-semibold hover:underline">Editar</button>
+                        </div>
+                        <div id="step4CustomerPreview" class="text-sm bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1">
+                            <!-- Datos del usuario insertados JS -->
+                        </div>
+                    </div>
+
+                    <!-- Selección Método de Pago -->
+                    <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-xl shadow-slate-200/50">
+                        <h3 class="font-bold text-slate-800 mb-4 flex items-center space-x-2">
+                            <i class="fa-solid fa-wallet text-brand-600"></i>
+                            <span>Método de Pago</span>
+                        </h3>
+
+                        <div class="space-y-3">
+                            <!-- Tarjeta -->
+                            <label class="flex items-center justify-between p-4 rounded-xl border border-slate-200 cursor-pointer hover:border-brand-500 transition has-[:checked]:border-brand-600 has-[:checked]:bg-brand-50/30">
+                                <div class="flex items-center space-x-3">
+                                    <input type="radio" name="paymentMethod" value="card" checked class="accent-brand-600" onchange="app.renderPaymentDetails('card')">
+                                    <div>
+                                        <p class="font-bold text-sm text-slate-800">Tarjeta de Crédito / Débito</p>
+                                        <p class="text-xs text-slate-500">Visa, Mastercard, Amex, Diners</p>
+                                    </div>
+                                </div>
+                                <div class="flex space-x-1 text-slate-400 text-lg">
+                                    <i class="fa-brands fa-cc-visa"></i>
+                                    <i class="fa-brands fa-cc-mastercard"></i>
+                                </div>
+                            </label>
+
+                            <!-- Yape / Plin -->
+                            <label class="flex items-center justify-between p-4 rounded-xl border border-slate-200 cursor-pointer hover:border-brand-500 transition has-[:checked]:border-brand-600 has-[:checked]:bg-brand-50/30">
+                                <div class="flex items-center space-x-3">
+                                    <input type="radio" name="paymentMethod" value="yape" class="accent-brand-600" onchange="app.renderPaymentDetails('yape')">
+                                    <div>
+                                        <p class="font-bold text-sm text-slate-800">Yape / Plin (Billetera Digital)</p>
+                                        <p class="text-xs text-slate-500">Pago instantáneo mediante código QR</p>
+                                    </div>
+                                </div>
+                                <span class="bg-purple-100 text-purple-700 font-bold text-xs px-2.5 py-1 rounded-md">QR</span>
+                            </label>
+
+                            <!-- Efectivo -->
+                            <label class="flex items-center justify-between p-4 rounded-xl border border-slate-200 cursor-pointer hover:border-brand-500 transition has-[:checked]:border-brand-600 has-[:checked]:bg-brand-50/30">
+                                <div class="flex items-center space-x-3">
+                                    <input type="radio" name="paymentMethod" value="cash" class="accent-brand-600" onchange="app.renderPaymentDetails('cash')">
+                                    <div>
+                                        <p class="font-bold text-sm text-slate-800">Efectivo contra entrega</p>
+                                        <p class="text-xs text-slate-500">Pagas al recibir en tu domicilio</p>
+                                    </div>
+                                </div>
+                                <i class="fa-solid fa-money-bill-wave text-slate-400"></i>
+                            </label>
+                        </div>
+
+                        <!-- Panel dinámico interactivo según método -->
+                        <div id="paymentDynamicContent" class="mt-5 p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+                            <!-- Simulación de formulario de tarjeta por defecto -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Confirmación final de montos -->
+                <div class="md:col-span-5">
+                    <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-xl shadow-slate-200/50 sticky top-24">
+                        <h3 class="font-bold text-slate-800 mb-4 text-base border-b border-slate-100 pb-3">Resumen de Cobro</h3>
+                        
+                        <div class="space-y-3 mb-6 text-sm">
+                            <div class="flex justify-between text-slate-600">
+                                <span>Items seleccionados:</span>
+                                <span id="checkoutItemsCount" class="font-semibold">0</span>
+                            </div>
+                            <div class="flex justify-between text-slate-600">
+                                <span>Subtotal:</span>
+                                <span id="checkoutSubtotal">S/ 0.00</span>
+                            </div>
+                            <div class="flex justify-between text-slate-600">
+                                <span>Delivery NutriVida:</span>
+                                <span>S/ 7.00</span>
+                            </div>
+                            <div class="flex justify-between font-extrabold text-slate-900 text-lg pt-3 border-t border-slate-200">
+                                <span>Total Final:</span>
+                                <span id="checkoutTotal" class="text-brand-600">S/ 0.00</span>
+                            </div>
+                        </div>
+
+                        <button id="btnConfirmOrder" onclick="app.processFinalOrder()" class="w-full bg-gradient-to-r from-brand-600 to-brand-accent hover:from-brand-700 hover:to-brand-accentHover text-white font-extrabold py-4 px-6 rounded-xl shadow-xl shadow-brand-500/30 transition duration-200 flex items-center justify-center space-x-2 text-base">
+                            <i class="fa-solid fa-lock text-sm"></i>
+                            <span>CONFIRMAR Y PAGAR</span>
+                        </button>
+                        <p class="text-center text-slate-400 text-[11px] mt-3">
+                            <i class="fa-solid fa-shield-halved mr-1"></i> Transacción 100% segura y encriptada
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PASO 5: RECIBO & COMPRA EXITOSA -->
+        <section id="step5View" class="hidden max-w-3xl mx-auto">
+            <div class="bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden">
+                <!-- Header Exitoso -->
+                <div class="bg-gradient-to-r from-brand-600 to-brand-lime p-8 text-center text-white relative">
+                    <div class="w-16 h-16 bg-white text-brand-600 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg text-2xl font-bold animate-bounce">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <h2 class="text-3xl font-extrabold">¡Pedido Confirmado!</h2>
+                    <p class="text-brand-100 text-sm mt-1">Gracias por alimentarte de forma saludable con NutriVida.</p>
+                </div>
+
+                <!-- Contenido del Recibo Digital -->
+                <div class="p-6 sm:p-8 space-y-6">
+                    <!-- Tracker de Estado en Tiempo Real -->
+                    <div class="bg-brand-50/50 rounded-2xl p-5 border border-brand-100">
+                        <h4 class="text-xs font-bold text-brand-800 uppercase tracking-wider mb-4 text-center">Estado del Envío en Tiempo Real</h4>
+                        <div class="flex justify-between items-center text-center max-w-md mx-auto">
+                            <div class="flex flex-col items-center">
+                                <div class="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center text-xs font-bold shadow">
+                                    <i class="fa-solid fa-receipt"></i>
+                                </div>
+                                <span class="text-[11px] font-bold text-slate-800 mt-1">Recibido</span>
+                            </div>
+                            <div class="flex-1 h-1 bg-brand-500 mx-2"></div>
+                            <div class="flex flex-col items-center">
+                                <div class="w-8 h-8 rounded-full bg-brand-500 text-white flex items-center justify-center text-xs font-bold shadow animate-pulse">
+                                    <i class="fa-solid fa-utensils"></i>
+                                </div>
+                                <span class="text-[11px] font-bold text-brand-600 mt-1">En Cocina</span>
+                            </div>
+                            <div class="flex-1 h-1 bg-slate-200 mx-2"></div>
+                            <div class="flex flex-col items-center opacity-50">
+                                <div class="w-8 h-8 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold">
+                                    <i class="fa-solid fa-motorcycle"></i>
+                                </div>
+                                <span class="text-[11px] font-medium text-slate-500 mt-1">En Camino</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Datos del Recibo -->
+                    <div class="grid grid-cols-2 gap-4 text-xs bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <div>
+                            <span class="text-slate-400 block">N° de Pedido:</span>
+                            <span id="receiptOrderId" class="font-bold text-slate-800 font-mono text-sm">#NV-84920</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block">Fecha y Hora:</span>
+                            <span id="receiptDate" class="font-bold text-slate-800">--/--/---- --:--</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block">Cliente:</span>
+                            <span id="receiptCustomerName" class="font-bold text-slate-800">--</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block">Método de Pago:</span>
+                            <span id="receiptPaymentMethod" class="font-bold text-slate-800 uppercase">--</span>
+                        </div>
+                        <div class="col-span-2">
+                            <span class="text-slate-400 block">Dirección de Entrega:</span>
+                            <span id="receiptAddress" class="font-bold text-slate-800">--</span>
+                        </div>
+                    </div>
+
+                    <!-- Detalle de Platos -->
+                    <div>
+                        <h4 class="font-bold text-slate-800 text-xs uppercase tracking-wider mb-3">Detalle de Productos</h4>
+                        <div id="receiptItemsList" class="divide-y divide-slate-100 text-xs">
+                            <!-- JS Dinámico -->
+                        </div>
+                    </div>
+
+                    <!-- Total Recibo -->
+                    <div class="flex justify-between items-center pt-4 border-t border-slate-200 font-extrabold text-base">
+                        <span class="text-slate-800">Total Pagado:</span>
+                        <span id="receiptTotal" class="text-brand-600 text-lg">S/ 0.00</span>
+                    </div>
+
+                    <!-- Botones de Acción -->
+                    <div class="flex flex-col sm:flex-row gap-3 pt-4">
+                        <button onclick="window.print()" class="flex-1 bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 rounded-xl transition text-xs flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-print"></i>
+                            <span>Imprimir / Guardar Recibo</span>
+                        </button>
+                        <button onclick="app.resetApp()" class="flex-1 bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 rounded-xl transition text-xs flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-rotate-right"></i>
+                            <span>Realizar Nuevo Pedido</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL CUSTOMIZER (PERSONALIZACIÓN DE PLATILLO) -->
+    <div id="customizerModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-150">
+            <!-- Modal Header -->
+            <div class="p-5 bg-gradient-to-r from-brand-600 to-brand-500 text-white flex justify-between items-center">
+                <div>
+                    <h3 id="modalDishTitle" class="text-lg font-extrabold">Personaliza tu Platillo</h3>
+                    <p class="text-xs text-brand-100">Arma tu combinación saludable perfecta</p>
+                </div>
+                <button onclick="app.closeCustomizerModal()" class="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Modal Content (Scrollable) -->
+            <div class="p-6 overflow-y-auto space-y-5 text-sm flex-1">
+                <!-- Proteína -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 flex items-center justify-between">
+                        <span>1. Proteína Principal *</span>
+                        <span class="text-[10px] text-slate-400 font-normal">Obligatorio</span>
+                    </label>
+                    <select id="custProtein" class="w-full p-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-500/50 outline-none text-xs">
+                        <option value="Pechuga de Pollo a la Plancha">Pechuga de Pollo a la Plancha (+ S/ 0.00)</option>
+                        <option value="Salmón al Horno">Salmón al Horno (+ S/ 5.00)</option>
+                        <option value="Tofu Marinado Orgánico">Tofu Marinado Orgánico (+ S/ 0.00)</option>
+                        <option value="Pavo Desmenuzado">Pavo Desmenuzado (+ S/ 2.00)</option>
+                        <option value="Atún Fresco sellado">Atún Fresco sellado (+ S/ 4.00)</option>
+                    </select>
+                </div>
+
+                <!-- Verduras -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">2. Verduras / Salteado *</label>
+                    <select id="custVeggies" class="w-full p-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-500/50 outline-none text-xs">
+                        <option value="Brócoli y Zanahorias al vapor">Brócoli y Zanahorias al vapor</option>
+                        <option value="Espinacas Baby y Mix Verde">Espinacas Baby y Mix Verde</option>
+                        <option value="Verduras Salteadas al Wok">Verduras Salteadas al Wok</option>
+                        <option value="Mix de Lectugas Orgánicas">Mix de Lechugas Orgánicas</option>
+                        <option value="Esteros de Espárragos Grillados">Esteros de Espárragos Grillados (+ S/ 2.00)</option>
+                    </select>
+                </div>
+
+                <!-- Aderezos -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">3. Aderezo Saludable *</label>
+                    <select id="custDressing" class="w-full p-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-500/50 outline-none text-xs">
+                        <option value="Vinagreta de Mostaza y Miel">Vinagreta de Mostaza y Miel (Light)</option>
+                        <option value="Dressing de Yogur Griego y Hierbas">Dressing de Yogur Griego y Hierbas</option>
+                        <option value="Vinagreta Balsámica con Chía">Vinagreta Balsámica con Chía</option>
+                        <option value="Aliño Creamy de Palta">Aliño Creamy de Palta</option>
+                        <option value="Aceite de Oliva Extra Virgen con Limón">Aceite de Oliva Extra Virgen con Limón</option>
+                    </select>
+                </div>
+
+                <!-- Carbohidratos -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">4. Carbohidrato Complejo *</label>
+                    <select id="custCarbs" class="w-full p-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-500/50 outline-none text-xs">
+                        <option value="Quinua Real Tricolor">Quinua Real Tricolor</option>
+                        <option value="Camote al Horno">Camote al Horno</option>
+                        <option value="Arroz Integral Silvestre">Arroz Integral Silvestre</option>
+                        <option value="Pasta Integral de Garbanzo">Pasta Integral de Garbanzo</option>
+                        <option value="Papa Nativa al Romero">Papa Nativa al Romero</option>
+                    </select>
+                </div>
+
+                <!-- Bebida -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">5. Bebida Natural (Opcional)</label>
+                    <select id="custBeverage" class="w-full p-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-500/50 outline-none text-xs">
+                        <option value="Ninguna">Sin Bebida</option>
+                        <option value="Jugo Verde Detox (+ S/ 6.00)">Jugo Verde Detox (+ S/ 6.00)</option>
+                        <option value="Limonada de Kión y Menta (+ S/ 5.00)">Limonada de Kión y Menta (+ S/ 5.00)</option>
+                        <option value="Agua de Jamaica Orgánica (+ S/ 5.00)">Agua de Jamaica Orgánica (+ S/ 5.00)</option>
+                        <option value="Chicha Morada Natural Stevia (+ S/ 5.00)">Chicha Morada Natural Stevia (+ S/ 5.00)</option>
+                        <option value="Té Helado Matcha Citrus (+ S/ 6.00)">Té Helado Matcha Citrus (+ S/ 6.00)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+                <div>
+                    <span class="text-xs text-slate-500 block">Precio Final Item</span>
+                    <span id="custModalCalculatedPrice" class="text-lg font-extrabold text-brand-600">S/ 0.00</span>
+                </div>
+                <button onclick="app.saveCustomizedDishToCart()" class="bg-brand-600 hover:bg-brand-700 text-white font-bold py-2.5 px-5 rounded-xl transition text-sm shadow-md shadow-brand-500/20">
+                    Agregar al Pedido <i class="fa-solid fa-plus ml-1 text-xs"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CONFIGURACIÓN SUPABASE -->
+    <div id="configModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center pb-3 border-b border-slate-100">
+                <h3 class="font-bold text-slate-800 text-base flex items-center space-x-2">
+                    <i class="fa-solid fa-database text-brand-600"></i>
+                    <span>Configurar Conexión Supabase</span>
+                </h3>
+                <button onclick="app.toggleConfigModal()" class="text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <p class="text-xs text-slate-500 leading-relaxed">
+                Ingresa las credenciales de tu proyecto Supabase para sincronizar clientes y pedidos directamente con tu base de datos en la nube.
+            </p>
+
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">SUPABASE URL</label>
+                    <input type="text" id="supabaseUrlInput" placeholder="https://xyzcompany.supabase.co" class="w-full p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">SUPABASE ANON KEY</label>
+                    <input type="password" id="supabaseKeyInput" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6..." class="w-full p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none">
+                </div>
+            </div>
+
+            <div class="pt-2 flex space-x-3">
+                <button onclick="app.saveSupabaseConfig()" class="flex-1 bg-brand-600 hover:bg-brand-700 text-white font-bold py-2.5 rounded-xl text-xs transition">
+                    Conectar Supabase
+                </button>
+                <button onclick="app.useDemoMode()" class="px-4 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-2.5 rounded-xl text-xs transition">
+                    Usar Demo
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL SCRIPT SQL SUPABASE -->
+    <div id="sqlModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-2xl w-full p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center pb-3 border-b border-slate-100">
+                <h3 class="font-bold text-slate-800 text-base flex items-center space-x-2">
+                    <i class="fa-solid fa-code text-brand-600"></i>
+                    <span>Script de Tablas para Supabase SQL Editor</span>
+                </h3>
+                <button onclick="app.toggleSqlModal()" class="text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <p class="text-xs text-slate-500">
+                Copia y ejecuta este script en el SQL Editor de tu proyecto Supabase para crear automáticamente las tablas <code class="bg-slate-100 px-1 py-0.5 rounded text-brand-700 font-mono">clientes</code> y <code class="bg-slate-100 px-1 py-0.5 rounded text-brand-700 font-mono">pedidos</code>.
+            </p>
+
+            <pre class="bg-slate-900 text-slate-100 p-4 rounded-xl text-[11px] font-mono overflow-x-auto max-h-60 leading-relaxed">
+-- 1. Tabla de Clientes
+CREATE TABLE IF NOT EXISTS clientes (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    nombres TEXT NOT NULL,
+    apellidos TEXT NOT NULL,
+    dni TEXT NOT NULL,
+    telefono TEXT NOT NULL,
+    direccion TEXT NOT NULL,
+    referencia TEXT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- 2. Tabla de Pedidos
+CREATE TABLE IF NOT EXISTS pedidos (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    order_code TEXT NOT NULL,
+    cliente_dni TEXT NOT NULL,
+    cliente_nombre TEXT NOT NULL,
+    direccion TEXT NOT NULL,
+    items JSONB NOT NULL,
+    subtotal NUMERIC(10,2) NOT NULL,
+    delivery_fee NUMERIC(10,2) NOT NULL,
+    monto_total NUMERIC(10,2) NOT NULL,
+    metodo_pago TEXT NOT NULL,
+    estado TEXT DEFAULT 'Recibido',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Deshabilitar RLS para pruebas rápidas
+ALTER TABLE clientes DISABLE ROW LEVEL SECURITY;
+ALTER TABLE pedidos DISABLE ROW LEVEL SECURITY;
+            </pre>
+
+            <div class="flex justify-end">
+                <button onclick="app.copySqlToClipboard()" class="bg-brand-600 hover:bg-brand-700 text-white font-bold py-2 px-4 rounded-xl text-xs transition flex items-center space-x-2">
+                    <i class="fa-solid fa-copy"></i>
+                    <span>Copiar Script SQL</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- BASE DE DATOS DE LOS 10 PLATILLOS SALUDABLES ---
+        const HEALTHY_MENU = [
+            {
+                id: 1,
+                name: "Bowl Fit de Quinua Real",
+                price: 28.00,
+                calories: "420 kcal",
+                desc: "Base de quinua organica, vegetales frescos, proteina a elección y aderezo artesanal.",
+                image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 2,
+                name: "Pechuga Grillada a las Hierbas",
+                price: 26.50,
+                calories: "380 kcal",
+                desc: "Jugosa pechuga marinado en hierbas finas acompañada de vegetales al vapor y camote.",
+                image: "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 3,
+                name: "Salmón al Horno con Espárragos",
+                price: 38.00,
+                calories: "490 kcal",
+                desc: "Filete de salmón rico en Omega-3 horneado con romero, espárragos y arroz silvestre.",
+                image: "https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 4,
+                name: "Wrap de Pavo Avocado",
+                price: 24.00,
+                calories: "350 kcal",
+                desc: "Tortilla integral cargada de pavo tierno, láminas de palta, espinaca y dressing de yogur.",
+                image: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 5,
+                name: "Poke Bowl de Atún Fresh",
+                price: 32.00,
+                calories: "440 kcal",
+                desc: "Atún en cubos marinado, pepino, pepinillo, palta, zanahoria y arroz integral verde.",
+                image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 6,
+                name: "Bowl Vegano Protein Tofu",
+                price: 25.00,
+                calories: "360 kcal",
+                desc: "Tofu salteado con sésamo, garbanzo crocante, espinaca baby y vinagreta balsámica.",
+                image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 7,
+                name: "Ensalada César Proteica Light",
+                price: 23.50,
+                calories: "310 kcal",
+                desc: "Mix de lechugas, crutones integrales horneados, pavo grillado y aderezo light de la casa.",
+                image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 8,
+                name: "Burger de Garbanzos & Espinaca",
+                price: 27.00,
+                calories: "410 kcal",
+                desc: "Hamburguesa artesanal vegetal en pan multi-cereales, acompañado de papitas nativas.",
+                image: "https://images.unsplash.com/photo-1520072959219-c595dc870360?auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 9,
+                name: "Lomo de Cerdo Magro Teriyaki",
+                price: 29.00,
+                calories: "430 kcal",
+                desc: "Corte magro glaseado en teriyaki artesanal bajo en sodio con brócoli y quinua.",
+                image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 10,
+                name: "Power Plate Keto Meatballs",
+                price: 31.00,
+                calories: "470 kcal",
+                desc: "Albóndigas de pavo en salsa pomodoro natural, espaguetis de zapallito italiano.",
+                image: "https://images.unsplash.com/photo-1529042410759-befb1204b468?auto=format&fit=crop&w=500&q=80"
+            }
+        ];
+
+        class NutriVidaApp {
+            constructor() {
+                this.currentStep = 1;
+                this.customer = null;
+                this.cart = [];
+                this.deliveryFee = 7.00;
+                this.supabase = null;
+                this.currentDishEditing = null;
+
+                this.init();
+            }
+
+            init() {
+                this.renderMenuGrid();
+                this.checkSavedSupabaseConfig();
+            }
+
+            // --- CONFIGURACIÓN DE SUPABASE ---
+            checkSavedSupabaseConfig() {
+                const url = localStorage.getItem('nutri_sp_url');
+                const key = localStorage.getItem('nutri_sp_key');
+                if (url && key && window.supabase) {
+                    try {
+                        this.supabase = window.supabase.createClient(url, key);
+                        this.updateSupabaseBadge(true, "Supabase Conectado");
+                    } catch (e) {
+                        this.updateSupabaseBadge(false, "Error de Conexión");
+                    }
+                } else {
+                    this.updateSupabaseBadge(false, "Modo Demo Local");
+                }
+            }
+
+            saveSupabaseConfig() {
+                const url = document.getElementById('supabaseUrlInput').value.trim();
+                const key = document.getElementById('supabaseKeyInput').value.trim();
+                if (url && key) {
+                    localStorage.setItem('nutri_sp_url', url);
+                    localStorage.setItem('nutri_sp_key', key);
+                    this.checkSavedSupabaseConfig();
+                    this.toggleConfigModal();
+                    alert("¡Credenciales de Supabase guardadas exitosamente!");
+                }
+            }
+
+            useDemoMode() {
+                localStorage.removeItem('nutri_sp_url');
+                localStorage.removeItem('nutri_sp_key');
+                this.supabase = null;
+                this.updateSupabaseBadge(false, "Modo Demo Local");
+                this.toggleConfigModal();
+            }
+
+            updateSupabaseBadge(isConnected, text) {
+                const dot = document.getElementById('statusDot');
+                const label = document.getElementById('statusText');
+                if (isConnected) {
+                    dot.className = "w-2 h-2 rounded-full bg-emerald-500 animate-pulse";
+                    label.textContent = text;
+                } else {
+                    dot.className = "w-2 h-2 rounded-full bg-amber-500 animate-pulse";
+                    label.textContent = text;
+                }
+            }
+
+            toggleConfigModal() {
+                document.getElementById('configModal').classList.toggle('hidden');
+            }
+
+            toggleSqlModal() {
+                document.getElementById('sqlModal').classList.toggle('hidden');
+            }
+
+            copySqlToClipboard() {
+                const sqlText = `CREATE TABLE IF NOT EXISTS clientes (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    nombres TEXT NOT NULL,
+    apellidos TEXT NOT NULL,
+    dni TEXT NOT NULL,
+    telefono TEXT NOT NULL,
+    direccion TEXT NOT NULL,
+    referencia TEXT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS pedidos (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    order_code TEXT NOT NULL,
+    cliente_dni TEXT NOT NULL,
+    cliente_nombre TEXT NOT NULL,
+    direccion TEXT NOT NULL,
+    items JSONB NOT NULL,
+    subtotal NUMERIC(10,2) NOT NULL,
+    delivery_fee NUMERIC(10,2) NOT NULL,
+    monto_total NUMERIC(10,2) NOT NULL,
+    metodo_pago TEXT NOT NULL,
+    estado TEXT DEFAULT 'Recibido',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+ALTER TABLE clientes DISABLE ROW LEVEL SECURITY;
+ALTER TABLE pedidos DISABLE ROW LEVEL SECURITY;`;
+
+                const el = document.createElement('textarea');
+                el.value = sqlText;
+                document.body.appendChild(el);
+                el.select();
+                document.execCommand('copy');
+                document.body.removeChild(el);
+                alert("¡Script SQL copiado al portapapeles!");
+            }
+
+            goToStep(stepNumber) {
+                if (stepNumber > 1 && !this.customer) {
+                    alert("Por favor registra tus datos personales en el Paso 1 antes de continuar.");
+                    return;
+                }
+                if (stepNumber > 2 && this.cart.length === 0) {
+                    alert("Debes agregar al menos una comida saludable al carrito.");
+                    return;
+                }
+
+                this.currentStep = stepNumber;
+
+                // Ocultar todas las vistas
+                for (let i = 1; i <= 5; i++) {
+                    const view = document.getElementById(`step${i}View`);
+                    if (view) view.classList.add('hidden');
+                }
+
+                // Mostrar vista seleccionada
+                document.getElementById(`step${stepNumber}View`).classList.remove('hidden');
+
+                // Actualizar estilo del Nav
+                this.updateStepIndicators(stepNumber);
+
+                // Lógica según paso
+                if (stepNumber === 3) this.renderStep3Summary();
+                if (stepNumber === 4) this.renderStep4Checkout();
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            updateStepIndicators(activeStep) {
+                for (let i = 1; i <= 4; i++) {
+                    const nav = document.getElementById(`stepNav${i}`);
+                    const badge = document.getElementById(`badge${i}`);
+                    if (!nav) continue;
+
+                    if (i <= activeStep) {
+                        nav.className = "flex flex-col sm:flex-row items-center space-y-1 sm:space-y-0 sm:space-x-2 text-brand-600 font-bold";
+                        if (badge) {
+                            badge.className = "w-7 h-7 rounded-full bg-brand-600 text-white flex items-center justify-center text-xs";
+                        }
+                    } else {
+                        nav.className = "flex flex-col sm:flex-row items-center space-y-1 sm:space-y-0 sm:space-x-2 text-slate-400 font-medium";
+                        if (badge) {
+                            badge.className = "w-7 h-7 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs";
+                        }
+                    }
+                }
+            }
+
+            async handleCustomerSubmit(e) {
+                e.preventDefault();
+                this.customer = {
+                    nombres: document.getElementById('regNombre').value.trim(),
+                    apellidos: document.getElementById('regApellido').value.trim(),
+                    dni: document.getElementById('regDni').value.trim(),
+                    telefono: document.getElementById('regTelefono').value.trim(),
+                    direccion: document.getElementById('regDireccion').value.trim(),
+                    referencia: document.getElementById('regReferencia').value.trim()
+                };
+
+                // Guardar en Supabase si está activo
+                if (this.supabase) {
+                    try {
+                        const { data, error } = await this.supabase
+                            .from('clientes')
+                            .insert([this.customer]);
+                        if (error) console.error("Error al guardar cliente en Supabase:", error);
+                    } catch (err) {
+                        console.error("Excepción al guardar en Supabase:", err);
+                    }
+                }
+
+                this.goToStep(2);
+            }
+
+            renderMenuGrid() {
+                const container = document.getElementById('menuGrid');
+                container.innerHTML = HEALTHY_MENU.map(dish => `
+                    <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition duration-300 flex flex-col justify-between">
+                        <div>
+                            <div class="relative h-44 overflow-hidden bg-slate-100">
+                                <img src="${dish.image}" alt="${dish.name}" class="w-full h-full object-cover hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/500x300/e2e8f0/1e293b?text=Comida+Saludable'">
+                                <span class="absolute top-3 right-3 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-full text-xs font-bold text-brand-700 shadow-sm">
+                                    <i class="fa-solid fa-fire text-amber-500 mr-1"></i>${dish.calories}
+                                </span>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-bold text-slate-800 text-base mb-1">${dish.name}</h3>
+                                <p class="text-xs text-slate-500 line-clamp-2 mb-3">${dish.desc}</p>
+                            </div>
+                        </div>
+                        <div class="p-4 pt-0 flex items-center justify-between border-t border-slate-50 mt-2">
+                            <span class="text-base font-extrabold text-slate-800">S/ ${dish.price.toFixed(2)}</span>
+                            <button onclick="app.openCustomizerModal(${dish.id})" class="bg-brand-50 hover:bg-brand-600 hover:text-white text-brand-700 font-bold px-3.5 py-2 rounded-xl text-xs transition duration-200 flex items-center space-x-1">
+                                <i class="fa-solid fa-sliders text-xs mr-1"></i>
+                                <span>Personalizar</span>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            openCustomizerModal(dishId) {
+                const dish = HEALTHY_MENU.find(d => d.id === dishId);
+                if (!dish) return;
+
+                this.currentDishEditing = dish;
+                document.getElementById('modalDishTitle').textContent = `Personalizar: ${dish.name}`;
+                document.getElementById('custModalCalculatedPrice').textContent = `S/ ${dish.price.toFixed(2)}`;
+
+                // Reset de selects
+                document.getElementById('custProtein').selectedIndex = 0;
+                document.getElementById('custVeggies').selectedIndex = 0;
+                document.getElementById('custDressing').selectedIndex = 0;
+                document.getElementById('custCarbs').selectedIndex = 0;
+                document.getElementById('custBeverage').selectedIndex = 0;
+
+                document.getElementById('customizerModal').classList.remove('hidden');
+            }
+
+            closeCustomizerModal() {
+                document.getElementById('customizerModal').classList.add('hidden');
+                this.currentDishEditing = null;
+            }
+
+            saveCustomizedDishToCart() {
+                if (!this.currentDishEditing) return;
+
+                const protein = document.getElementById('custProtein').value;
+                const veggies = document.getElementById('custVeggies').value;
+                const dressing = document.getElementById('custDressing').value;
+                const carbs = document.getElementById('custCarbs').value;
+                const beverage = document.getElementById('custBeverage').value;
+
+                let extraCost = 0;
+                if (protein.includes('+ S/ 5.00')) extraCost += 5.00;
+                if (protein.includes('+ S/ 2.00')) extraCost += 2.00;
+                if (protein.includes('+ S/ 4.00')) extraCost += 4.00;
+                if (veggies.includes('+ S/ 2.00')) extraCost += 2.00;
+                if (beverage.includes('+ S/ 6.00')) extraCost += 6.00;
+                if (beverage.includes('+ S/ 5.00')) extraCost += 5.00;
+
+                const itemTotal = this.currentDishEditing.price + extraCost;
+
+                const cartItem = {
+                    cartItemId: Date.now(),
+                    baseDish: this.currentDishEditing.name,
+                    protein: protein.replace(/\s*\(\+ S\/ [0-9.]+\)/, ''),
+                    veggies: veggies.replace(/\s*\(\+ S\/ [0-9.]+\)/, ''),
+                    dressing: dressing,
+                    carbs: carbs,
+                    beverage: beverage.replace(/\s*\(\+ S\/ [0-9.]+\)/, ''),
+                    unitPrice: itemTotal,
+                    quantity: 1
+                };
+
+                this.cart.push(cartItem);
+                this.updateCartUI();
+                this.closeCustomizerModal();
+            }
+
+            updateCartUI() {
+                const container = document.getElementById('cartItemsContainer');
+                const badge = document.getElementById('cartBadgeCount');
+                const btnContinue = document.getElementById('btnContinueToStep3');
+
+                const totalItems = this.cart.reduce((acc, i) => acc + i.quantity, 0);
+                badge.textContent = `${totalItems} items`;
+
+                if (this.cart.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center py-8 text-slate-400">
+                            <i class="fa-solid fa-utensils text-3xl mb-2"></i>
+                            <p class="text-xs">Aún no has agregado ninguna comida a tu lista.</p>
+                        </div>
+                    `;
+                    btnContinue.disabled = true;
+                } else {
+                    btnContinue.disabled = false;
+                    container.innerHTML = this.cart.map((item, idx) => `
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 flex items-start justify-between space-x-2">
+                            <div class="flex-1 min-w-0">
+                                <p class="font-bold text-slate-800 text-xs truncate">${item.baseDish}</p>
+                                <p class="text-[10px] text-slate-500 leading-tight">
+                                    ${item.protein} • ${item.carbs}
+                                </p>
+                                ${item.beverage !== 'Ninguna' ? `<p class="text-[10px] text-brand-600 font-medium">Bebida: ${item.beverage}</p>` : ''}
+                                <span class="font-bold text-slate-700 text-xs mt-1 block">S/ ${item.unitPrice.toFixed(2)}</span>
+                            </div>
+                            <button onclick="app.removeCartItem(${item.cartItemId})" class="text-slate-400 hover:text-red-500 p-1">
+                                <i class="fa-solid fa-trash-can text-xs"></i>
+                            </button>
+                        </div>
+                    `).join('');
+                }
+
+                // Cálculo de Totales
+                const subtotal = this.cart.reduce((acc, i) => acc + (i.unitPrice * i.quantity), 0);
+                const total = subtotal > 0 ? subtotal + this.deliveryFee : 0;
+
+                document.getElementById('cartSubtotal').textContent = `S/ ${subtotal.toFixed(2)}`;
+                document.getElementById('cartTotal').textContent = `S/ ${total.toFixed(2)}`;
+            }
+
+            removeCartItem(cartItemId) {
+                this.cart = this.cart.filter(i => i.cartItemId !== cartItemId);
+                this.updateCartUI();
+            }
+
+            renderStep3Summary() {
+                const container = document.getElementById('step3CartList');
+                container.innerHTML = this.cart.map(item => `
+                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div class="space-y-1">
+                            <h4 class="font-bold text-slate-800 text-base">${item.baseDish}</h4>
+                            <div class="flex flex-wrap gap-2 text-xs text-slate-600">
+                                <span class="bg-white px-2 py-0.5 rounded border border-slate-200">🍗 ${item.protein}</span>
+                                <span class="bg-white px-2 py-0.5 rounded border border-slate-200">🥗 ${item.veggies}</span>
+                                <span class="bg-white px-2 py-0.5 rounded border border-slate-200">🥔 ${item.carbs}</span>
+                                <span class="bg-white px-2 py-0.5 rounded border border-slate-200">🥑 ${item.dressing}</span>
+                                ${item.beverage !== 'Ninguna' ? `<span class="bg-brand-100 text-brand-800 px-2 py-0.5 rounded">🥤 ${item.beverage}</span>` : ''}
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-4 self-end sm:self-center">
+                            <span class="font-extrabold text-slate-800 text-base">S/ ${item.unitPrice.toFixed(2)}</span>
+                            <button onclick="app.removeCartItem(${item.cartItemId}); app.renderStep3Summary();" class="text-red-500 hover:text-red-700 text-xs p-2 bg-white rounded-lg border border-slate-200">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+
+                const subtotal = this.cart.reduce((acc, i) => acc + (i.unitPrice * i.quantity), 0);
+                const total = subtotal + this.deliveryFee;
+                const igv = total * 0.18;
+
+                document.getElementById('summarySubtotal').textContent = `S/ ${subtotal.toFixed(2)}`;
+                document.getElementById('summaryDelivery').textContent = `S/ ${this.deliveryFee.toFixed(2)}`;
+                document.getElementById('summaryIgv').textContent = `S/ ${igv.toFixed(2)}`;
+                document.getElementById('summaryTotal').textContent = `S/ ${total.toFixed(2)}`;
+            }
+
+            renderStep4Checkout() {
+                if (!this.customer) return;
+
+                // Preview Cliente
+                document.getElementById('step4CustomerPreview').innerHTML = `
+                    <p class="font-bold text-slate-800">${this.customer.nombres} ${this.customer.apellidos} <span class="text-xs text-slate-500 font-normal">(DNI: ${this.customer.dni})</span></p>
+                    <p class="text-slate-600"><i class="fa-solid fa-phone mr-1 text-slate-400"></i> Tel: ${this.customer.telefono}</p>
+                    <p class="text-slate-600"><i class="fa-solid fa-location-arrow mr-1 text-slate-400"></i> ${this.customer.direccion}</p>
+                    <p class="text-slate-500 text-xs italic"><i class="fa-solid fa-info-circle mr-1"></i> Ref: ${this.customer.referencia}</p>
+                `;
+
+                // Totales Checkout
+                const totalItems = this.cart.reduce((acc, i) => acc + i.quantity, 0);
+                const subtotal = this.cart.reduce((acc, i) => acc + (i.unitPrice * i.quantity), 0);
+                const total = subtotal + this.deliveryFee;
+
+                document.getElementById('checkoutItemsCount').textContent = totalItems;
+                document.getElementById('checkoutSubtotal').textContent = `S/ ${subtotal.toFixed(2)}`;
+                document.getElementById('checkoutTotal').textContent = `S/ ${total.toFixed(2)}`;
+
+                this.renderPaymentDetails('card');
+            }
+
+            renderPaymentDetails(method) {
+                const container = document.getElementById('paymentDynamicContent');
+                if (method === 'card') {
+                    container.innerHTML = `
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Número de Tarjeta</label>
+                                <input type="text" placeholder="4557 •••• •••• 8821" class="w-full p-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-1 focus:ring-brand-500">
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">MM/AA</label>
+                                    <input type="text" placeholder="12/28" class="w-full p-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-1 focus:ring-brand-500">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">CVV</label>
+                                    <input type="password" placeholder="123" maxlength="4" class="w-full p-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-1 focus:ring-brand-500">
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (method === 'yape') {
+                    container.innerHTML = `
+                        <div class="text-center space-y-2 py-2">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=NutriVidaFitPayment" alt="QR Yape" class="mx-auto rounded-xl border border-slate-200 shadow-sm">
+                            <p class="font-bold text-slate-800 text-xs">Escanea el QR con Yape o Plin</p>
+                            <p class="text-[11px] text-slate-500">Número asociado: <strong>987 654 321 (NutriVida S.A.C.)</strong></p>
+                        </div>
+                    `;
+                } else {
+                    container.innerHTML = `
+                        <div class="p-2 text-center text-slate-600">
+                            <p class="font-semibold text-xs mb-1">Pagarás en efectivo al motorizado.</p>
+                            <p class="text-[11px]">Procura tener el monto exacto o indicar el cambio requerido en las observaciones.</p>
+                        </div>
+                    `;
+                }
+            }
+
+            async processFinalOrder() {
+                const btn = document.getElementById('btnConfirmOrder');
+                btn.disabled = true;
+                btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin mr-2"></i> Procesando Pedido...`;
+
+                const selectedPayment = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'card';
+                const paymentLabels = { card: 'Tarjeta de Crédito', yape: 'Yape / Plin', cash: 'Efectivo contra entrega' };
+
+                const subtotal = this.cart.reduce((acc, i) => acc + (i.unitPrice * i.quantity), 0);
+                const total = subtotal + this.deliveryFee;
+                const orderCode = `NV-${Math.floor(10000 + Math.random() * 90000)}`;
+
+                const orderPayload = {
+                    order_code: orderCode,
+                    cliente_dni: this.customer.dni,
+                    cliente_nombre: `${this.customer.nombres} ${this.customer.apellidos}`,
+                    direccion: this.customer.direccion,
+                    items: this.cart,
+                    subtotal: subtotal,
+                    delivery_fee: this.deliveryFee,
+                    monto_total: total,
+                    metodo_pago: paymentLabels[selectedPayment],
+                    estado: 'Recibido'
+                };
+
+                // Enviar a Supabase si existe conexión
+                if (this.supabase) {
+                    try {
+                        const { data, error } = await this.supabase
+                            .from('pedidos')
+                            .insert([orderPayload]);
+                        if (error) console.error("Error al guardar pedido en Supabase:", error);
+                    } catch (e) {
+                        console.error("Excepción al guardar pedido:", e);
+                    }
+                }
+
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.innerHTML = `<i class="fa-solid fa-lock text-sm"></i> <span>CONFIRMAR Y PAGAR</span>`;
+                    this.showReceiptScreen(orderCode, paymentLabels[selectedPayment], total);
+                }, 1200);
+            }
+
+            showReceiptScreen(orderCode, paymentMethodLabel, totalAmount) {
+                // Rellenar Recibo
+                document.getElementById('receiptOrderId').textContent = `#${orderCode}`;
+                document.getElementById('receiptDate').textContent = new Date().toLocaleString('es-PE');
+                document.getElementById('receiptCustomerName').textContent = `${this.customer.nombres} ${this.customer.apellidos}`;
+                document.getElementById('receiptPaymentMethod').textContent = paymentMethodLabel;
+                document.getElementById('receiptAddress').textContent = `${this.customer.direccion} (Ref: ${this.customer.referencia})`;
+                document.getElementById('receiptTotal').textContent = `S/ ${totalAmount.toFixed(2)}`;
+
+                // Lista de items recibo
+                const itemsContainer = document.getElementById('receiptItemsList');
+                itemsContainer.innerHTML = this.cart.map(item => `
+                    <div class="py-2 flex justify-between items-center">
+                        <div>
+                            <span class="font-bold text-slate-800 block">${item.baseDish}</span>
+                            <span class="text-[10px] text-slate-500">${item.protein} | ${item.carbs} ${item.beverage !== 'Ninguna' ? '| ' + item.beverage : ''}</span>
+                        </div>
+                        <span class="font-bold text-slate-700">S/ ${item.unitPrice.toFixed(2)}</span>
+                    </div>
+                `).join('');
+
+                // Lanzar animación de Confeti
+                if (window.confetti) {
+                    confetti({
+                        particleCount: 100,
+                        spread: 70,
+                        origin: { y: 0.6 }
+                    });
+                }
+
+                // Mostrar paso 5
+                this.goToStep(5);
+            }
+
+            resetApp() {
+                this.cart = [];
+                this.updateCartUI();
+                this.goToStep(1);
+            }
+        }
+
+        let app;
+        window.addEventListener('DOMContentLoaded', () => {
+            app = new NutriVidaApp();
+        });
+    </script>
+</body>
+</html>
