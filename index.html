@@ -12,7 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- SheetJS (XLSX) para exportación a Excel -->
+    <!-- SheetJS (XLSX) para exportar a Excel -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
     <script>
@@ -391,7 +391,7 @@
 
     </main>
 
-    <!-- MODAL BASE DE DATOS PRIVADA (ADMIN) -->
+    <!-- MODAL BASE DE DATOS PRIVADA (ADMIN) CON BOTONES DE EXPORTAR -->
     <div id="modal-database" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
             <div class="p-4 border-b border-slate-200 flex justify-between items-center bg-slate-800 text-white">
@@ -405,9 +405,9 @@
             </div>
 
             <div class="p-6 overflow-y-auto custom-scrollbar flex-grow space-y-6">
-                <!-- CLIENTES -->
+                <!-- SECCIÓN CLIENTES -->
                 <div>
-                    <div class="flex justify-between items-center mb-3">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3">
                         <h4 class="font-extrabold text-sm text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
                             <i class="fa-solid fa-users text-emerald-600"></i> Clientes Registrados (<span id="db-count-clientes">0</span>)
                         </h4>
@@ -432,9 +432,9 @@
                     </div>
                 </div>
 
-                <!-- PEDIDOS -->
+                <!-- SECCIÓN PEDIDOS -->
                 <div>
-                    <div class="flex justify-between items-center mb-3">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3">
                         <h4 class="font-extrabold text-sm text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
                             <i class="fa-solid fa-receipt text-amber-500"></i> Pedidos Recibidos (<span id="db-count-pedidos">0</span>)
                         </h4>
@@ -466,7 +466,7 @@
         </div>
     </div>
 
-    <!-- LOGICA JAVASCRIPT -->
+    <!-- LÓGICA JAVASCRIPT -->
     <script>
         const SUPABASE_URL = "https://siysayzprwebprqophgr.supabase.co";
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNpeXNheXpwcndlYnBycW9waGdyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAzNzU0NTksImV4cCI6MjEwNTk1MTQ1OX0.cN1SjlmMGUZmdTZaWDqGHEJiNSqvwaFXL5S5ZfNX-nM";
@@ -766,6 +766,7 @@
             }
         }
 
+        // FUNCIÓN DE EXPORTACIÓN A EXCEL (.XLSX)
         async function exportarTablaExcel(nombreTabla) {
             try {
                 const { data, error } = await supabaseClient.from(nombreTabla).select('*');
@@ -776,7 +777,7 @@
                 }
 
                 if (!data || data.length === 0) {
-                    alert("No hay registros en la tabla " + nombreTabla + " para exportar.");
+                    alert("No hay registros en la tabla '" + nombreTabla + "' para exportar.");
                     return;
                 }
 
