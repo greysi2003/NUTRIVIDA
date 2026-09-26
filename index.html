@@ -35,11 +35,8 @@
         }
     </script>
     <style>
-        .step-inactive { opacity: 0.5; filter: grayscale(1); pointer-events: none; }
-        .step-active { opacity: 1; filter: grayscale(0); }
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
-        .custom-scrollbar::-webkit-scrollbar-track-piece { background: #f1f1f1; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #22c55e; border-radius: 4px; }
     </style>
 </head>
@@ -59,7 +56,7 @@
             </div>
             
             <div class="flex items-center gap-2">
-                <span id="connection-status" class="hidden text-xs px-2.5 py-1 rounded-full font-medium bg-emerald-100 text-emerald-800 border border-emerald-300">
+                <span id="connection-status" class="text-xs px-2.5 py-1 rounded-full font-medium bg-emerald-100 text-emerald-800 border border-emerald-300">
                     <i class="fa-solid fa-circle text-[8px] mr-1 text-emerald-500"></i> En Línea
                 </span>
             </div>
@@ -73,14 +70,13 @@
                 <div class="absolute top-1/2 left-0 w-full h-1 bg-slate-200 -translate-y-1/2 -z-0"></div>
                 <div id="progress-line" class="absolute top-1/2 left-0 h-1 bg-brand-500 -translate-y-1/2 transition-all duration-300 -z-0" style="width: 0%;"></div>
 
-                <!-- Step Indicators -->
                 <div id="ind-step-1" class="relative z-10 flex flex-col items-center">
                     <div class="w-9 h-9 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold text-sm shadow-md transition-all">1</div>
                     <span class="text-xs font-semibold mt-1 text-brand-700">1. Registro</span>
                 </div>
                 <div id="ind-step-2" class="relative z-10 flex flex-col items-center opacity-50">
                     <div class="w-9 h-9 rounded-full bg-slate-300 text-slate-600 flex items-center justify-center font-bold text-sm transition-all">2</div>
-                    <span class="text-xs font-semibold mt-1 text-slate-500">2. Menú & Personalización</span>
+                    <span class="text-xs font-semibold mt-1 text-slate-500">2. Menú</span>
                 </div>
                 <div id="ind-step-3" class="relative z-10 flex flex-col items-center opacity-50">
                     <div class="w-9 h-9 rounded-full bg-slate-300 text-slate-600 flex items-center justify-center font-bold text-sm transition-all">3</div>
@@ -88,7 +84,7 @@
                 </div>
                 <div id="ind-step-4" class="relative z-10 flex flex-col items-center opacity-50">
                     <div class="w-9 h-9 rounded-full bg-slate-300 text-slate-600 flex items-center justify-center font-bold text-sm transition-all">4</div>
-                    <span class="text-xs font-semibold mt-1 text-slate-500">4. Pago y Envío</span>
+                    <span class="text-xs font-semibold mt-1 text-slate-500">4. Pago</span>
                 </div>
             </div>
         </div>
@@ -97,7 +93,7 @@
     <!-- MAIN CONTENT -->
     <main class="flex-grow max-w-5xl w-full mx-auto p-4 md:p-6">
 
-        <!-- PASO 1: REGISTRO DE CLIENTE -->
+        <!-- PASO 1: REGISTRO -->
         <section id="step-1" class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200 max-w-2xl mx-auto">
             <div class="text-center mb-6">
                 <div class="w-12 h-12 bg-brand-100 text-brand-600 rounded-full flex items-center justify-center mx-auto mb-2 text-xl">
@@ -147,12 +143,12 @@
             </form>
         </section>
 
-        <!-- PASO 2: MENÚ & PERSONALIZACIÓN DE COMIDAS -->
+        <!-- PASO 2: MENÚ -->
         <section id="step-2" class="hidden">
             <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
                 <div>
                     <h2 class="text-2xl font-bold text-slate-800">Menú Saludable</h2>
-                    <p class="text-sm text-slate-500">Elige tus platillos preferidos y personalízalos según tus macros ideales.</p>
+                    <p class="text-sm text-slate-500">Elige tus platillos preferidos y personalízalos a tu gusto.</p>
                 </div>
                 <div class="bg-brand-50 border border-brand-200 px-4 py-2 rounded-xl flex items-center gap-3">
                     <i class="fa-solid fa-cart-shopping text-brand-600 text-lg"></i>
@@ -163,10 +159,7 @@
                 </div>
             </div>
 
-            <!-- Grilla de Platillos -->
-            <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Se renderiza con JS -->
-            </div>
+            <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
 
             <div class="mt-8 flex justify-between items-center bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
                 <button onclick="irAPaso(1)" class="px-5 py-2.5 border border-slate-300 rounded-xl font-semibold text-slate-600 hover:bg-slate-100 transition text-sm flex items-center gap-2">
@@ -179,18 +172,14 @@
             </div>
         </section>
 
-        <!-- PASO 3: RESUMEN Y COSTOS -->
+        <!-- PASO 3: RESUMEN -->
         <section id="step-3" class="hidden max-w-3xl mx-auto">
             <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200">
                 <h2 class="text-2xl font-bold text-slate-800 mb-1">Resumen del Pedido</h2>
                 <p class="text-sm text-slate-500 mb-6">Verifica el desglose final antes de procesar el pago.</p>
 
-                <!-- Detalle de Items Seleccionados -->
-                <div id="resumen-items" class="space-y-4 mb-6 divide-y divide-slate-100">
-                    <!-- JS Insertará los platos elegidos -->
-                </div>
+                <div id="resumen-items" class="space-y-4 mb-6 divide-y divide-slate-100"></div>
 
-                <!-- Desglose Financiero -->
                 <div class="bg-slate-50 p-4 rounded-xl space-y-2 border border-slate-200 text-sm">
                     <div class="flex justify-between text-slate-600">
                         <span>Subtotal Comidas</span>
@@ -222,13 +211,12 @@
             </div>
         </section>
 
-        <!-- PASO 4: PAGO Y VERIFICACIÓN DE DIRECCIÓN -->
+        <!-- PASO 4: PAGO -->
         <section id="step-4" class="hidden max-w-3xl mx-auto">
             <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200">
                 <h2 class="text-2xl font-bold text-slate-800 mb-1">Método de Pago y Entrega</h2>
                 <p class="text-sm text-slate-500 mb-6">Confirma los datos finales e indica cómo deseas pagar.</p>
 
-                <!-- Confirmación de Datos del Cliente -->
                 <div class="bg-brand-50/60 border border-brand-200 rounded-xl p-4 mb-6">
                     <div class="flex items-center justify-between mb-2">
                         <span class="text-xs font-bold text-brand-800 uppercase tracking-wider"><i class="fa-solid fa-location-dot mr-1"></i> Dirección de Entrega</span>
@@ -240,26 +228,25 @@
                     <p id="confirm-cliente-tel" class="text-xs text-slate-600 mt-1"></p>
                 </div>
 
-                <!-- Selección de Métodos de Pago -->
                 <div class="mb-6">
                     <label class="block text-xs font-bold uppercase text-slate-600 mb-3">Elige tu método de pago *</label>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                        <label class="border-2 border-slate-200 rounded-xl p-3 flex items-center gap-3 cursor-pointer hover:border-brand-500 transition payment-option">
-                            <input type="radio" name="payment_method" value="Yape/Plin" checked class="text-brand-600 focus:ring-brand-500">
+                        <label class="border-2 border-slate-200 rounded-xl p-3 flex items-center gap-3 cursor-pointer hover:border-brand-500 transition">
+                            <input type="radio" name="payment_method" value="Yape/Plin" checked class="text-brand-600">
                             <div>
                                 <span class="block font-bold text-xs text-slate-800">Yape / Plin</span>
                                 <span class="text-[10px] text-slate-400">QR / Número móvil</span>
                             </div>
                         </label>
-                        <label class="border-2 border-slate-200 rounded-xl p-3 flex items-center gap-3 cursor-pointer hover:border-brand-500 transition payment-option">
-                            <input type="radio" name="payment_method" value="Tarjeta" class="text-brand-600 focus:ring-brand-500">
+                        <label class="border-2 border-slate-200 rounded-xl p-3 flex items-center gap-3 cursor-pointer hover:border-brand-500 transition">
+                            <input type="radio" name="payment_method" value="Tarjeta" class="text-brand-600">
                             <div>
                                 <span class="block font-bold text-xs text-slate-800">Tarjeta Débito/Crédito</span>
-                                <span class="text-[10px] text-slate-400">POS al entregar / Web</span>
+                                <span class="text-[10px] text-slate-400">POS al entregar</span>
                             </div>
                         </label>
-                        <label class="border-2 border-slate-200 rounded-xl p-3 flex items-center gap-3 cursor-pointer hover:border-brand-500 transition payment-option">
-                            <input type="radio" name="payment_method" value="Efectivo" class="text-brand-600 focus:ring-brand-500">
+                        <label class="border-2 border-slate-200 rounded-xl p-3 flex items-center gap-3 cursor-pointer hover:border-brand-500 transition">
+                            <input type="radio" name="payment_method" value="Efectivo" class="text-brand-600">
                             <div>
                                 <span class="block font-bold text-xs text-slate-800">Efectivo</span>
                                 <span class="text-[10px] text-slate-400">Pago contra entrega</span>
@@ -268,7 +255,6 @@
                     </div>
                 </div>
 
-                <!-- Detalle final del monto -->
                 <div class="flex items-center justify-between border-t border-slate-200 pt-4 mb-6">
                     <span class="text-sm font-bold text-slate-700">Monto Final a Cancelar:</span>
                     <span id="pago-monto-final" class="text-2xl font-black text-brand-600">S/ 0.00</span>
@@ -286,7 +272,7 @@
             </div>
         </section>
 
-        <!-- PASO 5: RECIBO Y EXITO DE COMPRA -->
+        <!-- PASO 5: RECIBO -->
         <section id="step-5" class="hidden max-w-xl mx-auto">
             <div class="bg-white rounded-3xl p-6 md:p-8 shadow-xl border border-slate-200 text-center relative overflow-hidden">
                 <div class="w-20 h-20 bg-brand-500 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-3xl shadow-lg">
@@ -296,27 +282,6 @@
                 <h2 class="text-3xl font-black text-slate-800 mb-1">¡Pedido Confirmado!</h2>
                 <p class="text-xs text-slate-500 mb-6">Gracias por alimentarte de forma saludable con LunchGo.</p>
 
-                <!-- Estado del Pedido -->
-                <div class="bg-slate-50 rounded-2xl p-4 mb-6 border border-slate-200 text-left">
-                    <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block text-center mb-3">Estado del Envío en Tiempo Real</span>
-                    <div class="flex items-center justify-between relative px-4">
-                        <div class="flex flex-col items-center z-10">
-                            <div class="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center text-xs font-bold"><i class="fa-solid fa-store"></i></div>
-                            <span class="text-[10px] font-bold text-slate-700 mt-1">Recibido</span>
-                        </div>
-                        <div class="flex flex-col items-center z-10">
-                            <div class="w-8 h-8 rounded-full bg-brand-200 text-brand-800 flex items-center justify-center text-xs font-bold"><i class="fa-solid fa-fire-burner"></i></div>
-                            <span class="text-[10px] font-bold text-slate-400 mt-1">En Cocina</span>
-                        </div>
-                        <div class="flex flex-col items-center z-10">
-                            <div class="w-8 h-8 rounded-full bg-slate-200 text-slate-400 flex items-center justify-center text-xs font-bold"><i class="fa-solid fa-motorcycle"></i></div>
-                            <span class="text-[10px] font-bold text-slate-400 mt-1">En Camino</span>
-                        </div>
-                        <div class="absolute top-4 left-8 right-8 h-0.5 bg-slate-200 -z-0"></div>
-                    </div>
-                </div>
-
-                <!-- Recibo Digital -->
                 <div class="border-2 border-dashed border-slate-200 rounded-2xl p-5 text-left mb-6 bg-slate-50/50">
                     <div class="flex justify-between items-center border-b border-slate-200 pb-3 mb-3">
                         <div>
@@ -329,9 +294,7 @@
                         </div>
                     </div>
 
-                    <div id="recibo-items-list" class="space-y-1.5 text-xs mb-3 text-slate-600">
-                        <!-- Items -->
-                    </div>
+                    <div id="recibo-items-list" class="space-y-1.5 text-xs mb-3 text-slate-600"></div>
 
                     <div class="border-t border-slate-200 pt-2 text-xs space-y-1">
                         <div class="flex justify-between text-slate-500">
@@ -366,10 +329,9 @@
 
     </main>
 
-    <!-- MODAL PERSONALIZADOR DE COMIDA -->
+    <!-- MODAL PERSONALIZADOR -->
     <div id="modal-personalizador" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-fade-in">
-            <!-- Modal Header -->
+        <div class="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
             <div class="p-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
                 <div>
                     <h3 id="modal-platillo-nombre" class="text-lg font-extrabold text-slate-800">Personalizar Platillo</h3>
@@ -380,9 +342,7 @@
                 </button>
             </div>
 
-            <!-- Modal Body (Opciones) -->
             <div class="p-6 overflow-y-auto custom-scrollbar space-y-5 flex-grow">
-                <!-- Proteína -->
                 <div>
                     <label class="block text-xs font-bold uppercase text-slate-600 mb-2">1. Proteína Principal *</label>
                     <select id="opt-proteina" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-brand-500 outline-none">
@@ -394,54 +354,45 @@
                     </select>
                 </div>
 
-                <!-- Verduras -->
                 <div>
-                    <label class="block text-xs font-bold uppercase text-slate-600 mb-2">2. Verduras & Frescos (Elige hasta 3)</label>
+                    <label class="block text-xs font-bold uppercase text-slate-600 mb-2">2. Verduras & Frescos</label>
                     <div class="grid grid-cols-2 gap-2 text-xs">
                         <label class="flex items-center gap-2 p-2 border rounded-lg hover:bg-slate-50"><input type="checkbox" name="opt_verdura" value="Espinaca" checked> Espinaca Bebé</label>
                         <label class="flex items-center gap-2 p-2 border rounded-lg hover:bg-slate-50"><input type="checkbox" name="opt_verdura" value="Tomate Cherry" checked> Tomate Cherry</label>
                         <label class="flex items-center gap-2 p-2 border rounded-lg hover:bg-slate-50"><input type="checkbox" name="opt_verdura" value="Palta" checked> Palta / Aguacate</label>
                         <label class="flex items-center gap-2 p-2 border rounded-lg hover:bg-slate-50"><input type="checkbox" name="opt_verdura" value="Pepino"> Pepino</label>
-                        <label class="flex items-center gap-2 p-2 border rounded-lg hover:bg-slate-50"><input type="checkbox" name="opt_verdura" value="Zanahoria"> Zanahoria Rallada</label>
-                        <label class="flex items-center gap-2 p-2 border rounded-lg hover:bg-slate-50"><input type="checkbox" name="opt_verdura" value="Brócoli"> Brócoli al Vapor</label>
                     </div>
                 </div>
 
-                <!-- Carbohidratos -->
                 <div>
                     <label class="block text-xs font-bold uppercase text-slate-600 mb-2">3. Carbohidrato Saludable *</label>
                     <select id="opt-carbohidrato" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-brand-500 outline-none">
                         <option value="Quinoa Real">Quinoa Real Mix</option>
                         <option value="Arroz Integral">Arroz Integral con Ajonjolí</option>
                         <option value="Camote al Horno">Camote Dulce al Horno</option>
-                        <option value="Sin Carbohidratos (Base Doble Verdura)">Sin Carbohidratos (Base Extra Verdura)</option>
+                        <option value="Sin Carbohidratos">Sin Carbohidratos</option>
                     </select>
                 </div>
 
-                <!-- Aderezos -->
                 <div>
-                    <label class="block text-xs font-bold uppercase text-slate-600 mb-2">4. Aderezo Saludable (0 Calorías) *</label>
+                    <label class="block text-xs font-bold uppercase text-slate-600 mb-2">4. Aderezo *</label>
                     <select id="opt-aderezo" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-brand-500 outline-none">
-                        <option value="Vinagreta de Mostaza y Miel Fit">Vinagreta de Mostaza y Miel Fit</option>
+                        <option value="Vinagreta Mostaza y Miel">Vinagreta de Mostaza y Miel Fit</option>
                         <option value="Salsa Maracuyá Fit">Salsa Maracuyá Fit</option>
                         <option value="Aceite de Oliva & Limón">Aceite de Oliva Extra Virgen & Limón</option>
-                        <option value="Yogurt Griego con Hierbas">Yogurt Griego con Hierbas</option>
                     </select>
                 </div>
 
-                <!-- Bebida opcional -->
                 <div>
                     <label class="block text-xs font-bold uppercase text-slate-600 mb-2">5. Bebida Natural Opcional</label>
                     <select id="opt-bebida" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-brand-500 outline-none">
                         <option value="Ninguna">Sin Bebida</option>
-                        <option value="Limonada Kéfir de Menta (500ml) (+S/ 6.00)">Limonada Kéfir de Menta (+S/ 6.00)</option>
-                        <option value="Té Verde con Maracuyá (500ml) (+S/ 6.00)">Té Verde con Maracuyá (+S/ 6.00)</option>
-                        <option value="Jugo Detox Verde (500ml) (+S/ 8.00)">Jugo Detox Verde (+S/ 8.00)</option>
+                        <option value="Limonada Kéfir de Menta (+S/ 6.00)">Limonada Kéfir de Menta (+S/ 6.00)</option>
+                        <option value="Té Verde con Maracuyá (+S/ 6.00)">Té Verde con Maracuyá (+S/ 6.00)</option>
                     </select>
                 </div>
             </div>
 
-            <!-- Modal Footer -->
             <div class="p-4 border-t border-slate-200 bg-slate-50 flex justify-between items-center">
                 <div>
                     <span class="text-[10px] text-slate-400 font-bold block uppercase">Precio de este ítem:</span>
@@ -454,53 +405,36 @@
         </div>
     </div>
 
-    <!-- SCRIPT PRINCIPAL LÓGICA & BASE DE DATOS -->
+    <!-- SCRIPT DE NAVEGACIÓN Y CONEXIÓN BDD -->
     <script>
-        // CREDENCIALES CONFIGURADAS DIRECTAMENTE
         const SUPABASE_URL = "https://siysayzprwebprqophgr.supabase.co";
         const SUPABASE_ANON_KEY = "sb_publishable_alb604C7gVc9Yk5oaegilw_fpgysst-P-440P6P9t5q4Q.5434111";
 
         let supabase = null;
-        let isConnected = false;
-
-        // Inicializar Supabase inmediatamente
         try {
             if (window.supabase) {
                 supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                isConnected = true;
-                const statusEl = document.getElementById('connection-status');
-                if (statusEl) statusEl.classList.remove('hidden');
             }
-        } catch (e) {
-            console.error("Error conectando a Supabase:", e);
-        }
+        } catch (e) { console.log(e); }
 
-        // --- CATALOGO DE COMIDAS SALUDABLES LUNCHGO ---
         const CATALOGO_MENU = [
             { id: 1, nombre: "Bowl Proteico LunchGo", basePrecio: 24.00, desc: "Pechuga desmenuzada, quinoa real, palta, verdura mixta.", img: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=400&q=80" },
             { id: 2, nombre: "Salmón Grill & Espárragos", basePrecio: 32.00, desc: "Filete de salmón salvaje, espárragos al vapor y camote dulce.", img: "https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=400&q=80" },
             { id: 3, nombre: "Poke Bowl de Atún Fresco", basePrecio: 28.00, desc: "Atún en cubos, arroz integral, edamame, palta y aderezo ponzu.", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=400&q=80" },
             { id: 4, nombre: "Wrap Integrativo de Pavo", basePrecio: 20.00, desc: "Tortilla integral, pechuga de pavo, espinaca y humus suave.", img: "https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&w=400&q=80" },
             { id: 5, nombre: "Ensalada César Fit", basePrecio: 22.00, desc: "Cama de lechugas orgánicas, pollo grille, crutones integrales.", img: "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=400&q=80" },
-            { id: 6, nombre: "Bowl Vegano de Tofu y Quinoa", basePrecio: 23.00, desc: "Tofu sazonado, vegetales al wok, semillas de girasol.", img: "https://images.unsplash.com/photo-1511690656952-34342bb7c2f2?auto=format&fit=crop&w=400&q=80" },
-            { id: 7, nombre: "Lomo Salteado Fit", basePrecio: 29.00, desc: "Trozos de lomo magro, cebolla, tomate, acompañado de camote.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=400&q=80" },
-            { id: 8, nombre: "Keto Burger de Pavo & Palta", basePrecio: 25.00, desc: "Hamburguesa magra envuelta en hojas de lechuga fresca y tomate.", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=400&q=80" },
-            { id: 9, nombre: "Power Bowl Antiox", basePrecio: 19.00, desc: "Base de acai/yogurt griego, frutos rojos, granola artesanal.", img: "https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=400&q=80" },
-            { id: 10, nombre: "Tacos Fit de Pollo", basePrecio: 21.00, desc: "Pollo sazonado con especias suaves, pico de gallo y aguacate.", img: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=400&q=80" }
+            { id: 6, nombre: "Bowl Vegano de Tofu", basePrecio: 23.00, desc: "Tofu sazonado, vegetales al wok, semillas de girasol.", img: "https://images.unsplash.com/photo-1511690656952-34342bb7c2f2?auto=format&fit=crop&w=400&q=80" }
         ];
 
-        // ESTADO GLOBAL DE LA APP
         let clienteActual = null;
         let clienteIdSupabase = null;
         let carrito = [];
         let itemEnEdicion = null;
 
-        // AL CARGAR LA PAGINA
         document.addEventListener('DOMContentLoaded', () => {
             renderizarCatalogo();
         });
 
-        // --- MANEJO DE PASOS ---
         function irAPaso(paso) {
             for (let i = 1; i <= 5; i++) {
                 const sec = document.getElementById(`step-${i}`);
@@ -532,8 +466,7 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // --- PASO 1: GUARDAR CLIENTE ---
-        async function guardarCliente(e) {
+        function guardarCliente(e) {
             e.preventDefault();
             clienteActual = {
                 nombres: document.getElementById('cli-nombres').value.trim(),
@@ -541,39 +474,33 @@
                 dni: document.getElementById('cli-dni').value.trim(),
                 telefono: document.getElementById('cli-telefono').value.trim(),
                 direccion: document.getElementById('cli-direccion').value.trim(),
-                referencia: document.getElementById('cli-referencia').value.trim(),
+                referencia: document.getElementById('cli-referencia').value.trim()
             };
 
-            // Intentar guardar en Supabase si está disponible
-            if (isConnected && supabase) {
-                try {
-                    const { data, error } = await supabase.from('clientes').insert([clienteActual]).select();
-                    if (!error && data && data.length > 0) {
-                        clienteIdSupabase = data[0].id;
+            // Intentar envío asíncrono a Supabase sin detener la interfaz de usuario
+            if (supabase) {
+                supabase.from('clientes').insert([clienteActual]).select().then(res => {
+                    if (res.data && res.data[0]) {
+                        clienteIdSupabase = res.data[0].id;
                     }
-                } catch (err) {
-                    console.log("Aviso: Guardado localmente");
-                }
+                }).catch(err => console.log(err));
             }
 
+            // Cambiar inmediatamente al Menú
             irAPaso(2);
         }
 
-        // --- PASO 2: RENDERIZAR Y SELECCIONAR COMIDAS ---
         function renderizarCatalogo() {
             const grid = document.getElementById('menu-grid');
             grid.innerHTML = '';
 
             CATALOGO_MENU.forEach(item => {
                 const card = document.createElement('div');
-                card.className = "bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col justify-between";
+                card.className = "bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm flex flex-col justify-between";
                 card.innerHTML = `
                     <div>
                         <div class="h-40 overflow-hidden relative">
                             <img src="${item.img}" alt="${item.nombre}" class="w-full h-full object-cover">
-                            <span class="absolute top-2 right-2 bg-slate-900/70 text-white text-[10px] font-bold px-2 py-1 rounded-full backdrop-blur-sm">
-                                Healthy
-                            </span>
                         </div>
                         <div class="p-4">
                             <h3 class="font-bold text-slate-800 text-base mb-1">${item.nombre}</h3>
@@ -591,7 +518,6 @@
             });
         }
 
-        // PERSONALIZADOR MODAL
         function abrirPersonalizador(itemId) {
             const itemBase = CATALOGO_MENU.find(i => i.id === itemId);
             if (!itemBase) return;
@@ -617,7 +543,6 @@
 
             const bebida = document.getElementById('opt-bebida').value;
             if (bebida.includes('+S/ 6.00')) precio += 6.00;
-            if (bebida.includes('+S/ 8.00')) precio += 8.00;
 
             document.getElementById('modal-precio-calculado').innerText = `S/ ${precio.toFixed(2)}`;
             return precio;
@@ -667,11 +592,9 @@
             irAPaso(3);
         }
 
-        // --- PASO 3: RESUMEN Y CALCULOS ---
         function renderizarResumen() {
             const cont = document.getElementById('resumen-items');
             cont.innerHTML = '';
-
             let subtotal = 0;
 
             carrito.forEach(item => {
@@ -683,17 +606,12 @@
                         <h4 class="font-bold text-slate-800 text-sm">${item.nombreBase}</h4>
                         <div class="text-[11px] text-slate-500 space-y-0.5 mt-1">
                             <p><span class="font-semibold text-slate-600">Proteína:</span> ${item.proteina}</p>
-                            <p><span class="font-semibold text-slate-600">Verduras:</span> ${item.verduras}</p>
                             <p><span class="font-semibold text-slate-600">Carbohidrato:</span> ${item.carbohidrato}</p>
-                            <p><span class="font-semibold text-slate-600">Aderezo:</span> ${item.aderezo}</p>
-                            ${item.bebida !== 'Ninguna' ? `<p class="text-brand-700 font-semibold"><span class="font-semibold">Bebida:</span> ${item.bebida}</p>` : ''}
                         </div>
                     </div>
                     <div class="text-right">
                         <span class="font-bold text-sm text-slate-800 block">S/ ${item.precioFinal.toFixed(2)}</span>
-                        <button onclick="eliminarDelCarrito(${item.idCarrito})" class="text-[11px] text-red-500 hover:underline mt-1 font-semibold">
-                            Eliminar
-                        </button>
+                        <button onclick="eliminarDelCarrito(${item.idCarrito})" class="text-[11px] text-red-500 hover:underline font-semibold">Eliminar</button>
                     </div>
                 `;
                 cont.appendChild(div);
@@ -709,7 +627,6 @@
             document.getElementById('costo-total').innerText = `S/ ${total.toFixed(2)}`;
             document.getElementById('pago-monto-final').innerText = `S/ ${total.toFixed(2)}`;
 
-            // Actualizar datos del paso 4
             if (clienteActual) {
                 document.getElementById('confirm-cliente-nombre').innerText = `${clienteActual.nombres} ${clienteActual.apellidos} (DNI: ${clienteActual.dni})`;
                 document.getElementById('confirm-cliente-direccion').innerText = clienteActual.direccion;
@@ -718,11 +635,9 @@
             }
         }
 
-        // --- PASO 4 & 5: PROCESAR COMPRA Y REGISTRAR EN SUPABASE ---
-        async function procesarCompraFinal() {
+        function procesarCompraFinal() {
             const btn = document.getElementById('btn-finalizar');
             btn.disabled = true;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Guardando Pedido...`;
 
             const metodoPago = document.querySelector('input[name="payment_method"]:checked').value;
             const subtotal = carrito.reduce((s, i) => s + i.precioFinal, 0);
@@ -744,16 +659,10 @@
                 estado: 'Pendiente'
             };
 
-            // Intentar persistir en Supabase
-            if (isConnected && supabase) {
-                try {
-                    await supabase.from('pedidos').insert([datosPedidoObj]);
-                } catch (e) {
-                    console.log("Aviso: Pedido guardado localmente.");
-                }
+            if (supabase) {
+                supabase.from('pedidos').insert([datosPedidoObj]).catch(err => console.log(err));
             }
 
-            // Llenar Recibo
             document.getElementById('recibo-id').innerText = numPedido;
             document.getElementById('recibo-fecha').innerText = fechaHora;
             document.getElementById('recibo-metodo').innerText = metodoPago;
@@ -770,7 +679,6 @@
                 listRecibo.appendChild(d);
             });
 
-            // Animación Confetti
             if (window.confetti) {
                 confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
             }
