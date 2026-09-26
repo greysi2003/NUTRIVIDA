@@ -134,18 +134,18 @@
                 </div>
 
                 <button type="submit" id="btn-guardar-cliente" class="w-full bg-gradient-to-r from-emerald-500 to-lime-500 hover:from-emerald-600 hover:to-lime-600 text-white font-extrabold py-3.5 rounded-xl transition duration-200 shadow-md flex items-center justify-center gap-2 text-base mt-6">
-                    <span>Guardar Datos y Elegir Comida</span>
+                    <span>Guardar Datos y Armar Menú</span>
                     <i class="fa-solid fa-arrow-right"></i>
                 </button>
             </form>
         </section>
 
-        <!-- PASO 2: MENÚ -->
-        <section id="step-2" class="hidden">
-            <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
+        <!-- PASO 2: PERSONALIZADOR Y MENÚ -->
+        <section id="step-2" class="hidden space-y-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h2 class="text-2xl font-black text-slate-800">Menú Fit Gourmet</h2>
-                    <p class="text-xs text-slate-500">Selecciona y personaliza tus platillos con insumos 100% frescos.</p>
+                    <h2 class="text-2xl font-black text-slate-800">Personaliza tu Menú Saludable</h2>
+                    <p class="text-xs text-slate-500">Crea tu plato a la medida o elige entre las opciones recomendadas.</p>
                 </div>
                 <div class="bg-gradient-to-r from-emerald-500 to-lime-500 text-white px-5 py-2.5 rounded-2xl flex items-center gap-3 shadow-md">
                     <i class="fa-solid fa-basket-shopping text-xl text-amber-300"></i>
@@ -156,9 +156,76 @@
                 </div>
             </div>
 
-            <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            <!-- PERSONALIZADOR DINÁMICO DE PLATOS -->
+            <div class="bg-white rounded-3xl p-6 shadow-md border border-emerald-100">
+                <div class="flex items-center gap-2 mb-4 border-b border-slate-100 pb-3">
+                    <i class="fa-solid fa-utensils text-emerald-600 text-lg"></i>
+                    <h3 class="font-extrabold text-slate-800 text-base">Arma tu Bowl a la Medida (S/ 25.00)</h3>
+                </div>
 
-            <div class="mt-8 flex justify-between items-center bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- PROTEÍNA -->
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">1. Proteína Principal</label>
+                        <select id="builder-proteina" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs font-semibold focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                            <option value="Pechuga a la Plancha (150g)">Pechuga a la Plancha (150g)</option>
+                            <option value="Filete de Salmón (+S/ 6.00)">Filete de Salmón (+S/ 6.00)</option>
+                            <option value="Atún Fresco Sellado (+S/ 4.00)">Atún Fresco Sellado (+S/ 4.00)</option>
+                            <option value="Tofu Marinado Orgánico">Tofu Marinado Orgánico</option>
+                            <option value="Carne Desmechada de Res">Carne Desmechada de Res</option>
+                        </select>
+                    </div>
+
+                    <!-- CARBOHIDRATO -->
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">2. Carbohidrato Base</label>
+                        <select id="builder-carbo" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs font-semibold focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                            <option value="Quinoa Real Mixta">Quinoa Real Mixta</option>
+                            <option value="Arroz Integral al Olivo">Arroz Integral al Olivo</option>
+                            <option value="Camote al Horno">Camote al Horno</option>
+                            <option value="Papa Nativa Dorada">Papa Nativa Dorada</option>
+                            <option value="Sin Carbohidrato (Extra Ensalada)">Sin Carbohidrato (Extra Ensalada)</option>
+                        </select>
+                    </div>
+
+                    <!-- VEGETALES / ENSALADA -->
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">3. Ensalada / Acompañamiento</label>
+                        <select id="builder-vegetales" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs font-semibold focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                            <option value="Mix Verde + Palta + Tomate Cherry">Mix Verde + Palta + Tomate Cherry</option>
+                            <option value="Espárragos al Vapor + Zanahoria">Espárragos al Vapor + Zanahoria</option>
+                            <option value="Vainitas, Choclo & Edamame">Vainitas, Choclo & Edamame</option>
+                            <option value="Verduras Salteadas al Wok">Verduras Salteadas al Wok</option>
+                        </select>
+                    </div>
+
+                    <!-- ADEREZO -->
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">4. Salsa / Aderezo</label>
+                        <select id="builder-aderezo" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs font-semibold focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                            <option value="Vinagreta Honey Mustard">Vinagreta Honey Mustard</option>
+                            <option value="Salsa Oriental Sésamo">Salsa Oriental Sésamo</option>
+                            <option value="Yogur Griego & Hierbas">Yogur Griego & Hierbas</option>
+                            <option value="Aceite de Oliva & Limón">Aceite de Oliva & Limón</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mt-4 flex flex-col md:flex-row gap-3 items-center justify-between pt-3 border-t border-slate-100">
+                    <input type="text" id="builder-notas" class="w-full md:w-2/3 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Instrucciones especiales (ej. Poca sal, aderezo aparte, sin cebolla...)">
+                    <button onclick="agregarPlatoPersonalizado()" class="w-full md:w-auto bg-gradient-to-r from-emerald-600 to-lime-600 text-white font-extrabold px-6 py-2.5 rounded-xl text-xs hover:opacity-95 transition shadow-sm flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-plus"></i> Agregar Plato Personalizado
+                    </button>
+                </div>
+            </div>
+
+            <!-- CATÁLOGO PREDEFINIDO -->
+            <div>
+                <h3 class="font-extrabold text-slate-800 text-lg mb-4">O Sugerencias del Chef:</h3>
+                <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+            </div>
+
+            <div class="flex justify-between items-center bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
                 <button onclick="irAPaso(1)" class="px-5 py-2.5 border border-slate-300 rounded-xl font-bold text-slate-600 hover:bg-slate-100 transition text-xs flex items-center gap-2">
                     <i class="fa-solid fa-arrow-left"></i> Modificar Datos
                 </button>
@@ -326,50 +393,6 @@
 
     </main>
 
-    <!-- MODAL PERSONALIZACIÓN DE PLATO -->
-    <div id="modal-custom-plate" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative">
-            <button onclick="cerrarModalCustom()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center font-bold">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-
-            <h3 id="custom-plate-title" class="text-xl font-black text-slate-800 mb-1">Personalizar Plato</h3>
-            <p class="text-xs text-slate-500 mb-4">Ajusta los ingredientes a tu gusto de nutrición.</p>
-
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Añadir Proteína Extra</label>
-                    <select id="custom-proteina" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs font-semibold focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-                        <option value="Sin extra (+S/ 0.00)">Sin extra (+S/ 0.00)</option>
-                        <option value="Pechuga Grill Extra (+S/ 5.00)">Pechuga Grill Extra (+S/ 5.00)</option>
-                        <option value="Salmón Grill Extra (+S/ 9.00)">Salmón Grill Extra (+S/ 9.00)</option>
-                        <option value="Atún Fresco Extra (+S/ 7.00)">Atún Fresco Extra (+S/ 7.00)</option>
-                        <option value="Tofu Marinado Extra (+S/ 4.00)">Tofu Marinado Extra (+S/ 4.00)</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Seleccionar Aderezo</label>
-                    <select id="custom-aderezo" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs font-semibold focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-                        <option value="Vinagreta Honey Mustard">Vinagreta Honey Mustard</option>
-                        <option value="Salsa Oriental Sésamo">Salsa Oriental Sésamo</option>
-                        <option value="Aderezo Yogur & Hierbas">Aderezo Yogur & Hierbas</option>
-                        <option value="Sin Aderezo / Limón Aparte">Sin Aderezo / Limón Aparte</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Notas / Exclusiones</label>
-                    <textarea id="custom-notas" rows="2" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Ej. Sin cebolla, aderezo aparte, poca sal..."></textarea>
-                </div>
-            </div>
-
-            <button onclick="confirmarPersonalizacion()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3 rounded-xl transition shadow-md text-xs uppercase mt-6">
-                Añadir al Pedido
-            </button>
-        </div>
-    </div>
-
     <!-- MODAL BASE DE DATOS PRIVADA (SOLO ADMINISTRADOR) -->
     <div id="modal-database" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
@@ -395,7 +418,8 @@
                         <table class="w-full text-left border-collapse text-xs">
                             <thead>
                                 <tr class="bg-slate-100 text-slate-700 border-b border-slate-200">
-                                    <th class="p-2.5 font-bold">Nombre Completo</th>
+                                    <th class="p-2.5 font-bold">Nombres</th>
+                                    <th class="p-2.5 font-bold">Apellidos</th>
                                     <th class="p-2.5 font-bold">DNI</th>
                                     <th class="p-2.5 font-bold">Teléfono</th>
                                     <th class="p-2.5 font-bold">Dirección / Referencia</th>
@@ -441,7 +465,8 @@
     <!-- LOGICA JAVASCRIPT -->
     <script>
         const SUPABASE_URL = "https://siysayzprwebprqophgr.supabase.co";
-        const SUPABASE_KEY = "sb_publishable_L6ysgw5hP0bs9EsyJr2IiQ_5GQwiI4-";
+        // Clave pública (Anon Public Key)
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNpeXNheXpwcndlYnBycW9waGdyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg4MjMwMjUsImV4cCI6MjA3NDM5OTAyNX0.A1R_gAClp3OlsR22t7P1B4mZ2V1XvQ3k3B4I2N1M2O3";
         const CLAVE_ADMIN = "admin123";
 
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -454,7 +479,6 @@
 
         let clienteActual = null;
         let carrito = [];
-        let itemEnPersonalizacion = null;
 
         function irAPaso(paso) {
             for (let i = 1; i <= 5; i++) {
@@ -505,13 +529,19 @@
             clienteActual = clienteObj;
 
             try {
-                await supabaseClient.from('clientes').insert([clienteObj]);
+                const { data, error } = await supabaseClient.from('clientes').insert([clienteObj]);
+                if (error) {
+                    console.error("Error al guardar cliente en Supabase:", error);
+                    alert("Error guardando datos en la BD: " + error.message);
+                } else {
+                    console.log("Cliente guardado correctamente en Supabase");
+                }
             } catch (err) {
-                console.error("Error al registrar cliente en Supabase:", err);
+                console.error("Error crítico guardando cliente:", err);
             }
 
             btn.disabled = false;
-            btn.innerHTML = `<span>Guardar Datos y Elegir Comida</span><i class="fa-solid fa-arrow-right"></i>`;
+            btn.innerHTML = `<span>Guardar Datos y Armar Menú</span><i class="fa-solid fa-arrow-right"></i>`;
             irAPaso(2);
         }
 
@@ -519,17 +549,17 @@
             const grid = document.getElementById('menu-grid');
             grid.innerHTML = CATALOGO_MENU.map(item => `
                 <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-200 flex flex-col hover:shadow-lg transition">
-                    <img src="${item.img}" alt="${item.nombre}" class="w-full h-44 object-cover">
-                    <div class="p-5 flex flex-col flex-grow">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="font-extrabold text-slate-800 text-base leading-snug">${item.nombre}</h3>
+                    <img src="${item.img}" alt="${item.nombre}" class="w-full h-40 object-cover">
+                    <div class="p-4 flex flex-col flex-grow">
+                        <div class="flex justify-between items-start mb-1">
+                            <h3 class="font-extrabold text-slate-800 text-sm leading-snug">${item.nombre}</h3>
                             <span class="text-[10px] font-extrabold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">${item.kcal}</span>
                         </div>
-                        <p class="text-xs text-slate-500 mb-4 flex-grow">${item.desc}</p>
-                        <div class="flex items-center justify-between border-t border-slate-100 pt-3">
-                            <span class="font-black text-slate-800 text-lg">S/ ${item.basePrecio.toFixed(2)}</span>
-                            <button onclick="abrirModalCustom(${item.id})" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs transition shadow-sm flex items-center gap-1.5">
-                                <i class="fa-solid fa-sliders"></i> Personalizar
+                        <p class="text-xs text-slate-500 mb-3 flex-grow">${item.desc}</p>
+                        <div class="flex items-center justify-between border-t border-slate-100 pt-2">
+                            <span class="font-black text-slate-800 text-base">S/ ${item.basePrecio.toFixed(2)}</span>
+                            <button onclick="agregarSugerencia(${item.id})" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs transition flex items-center gap-1">
+                                <i class="fa-solid fa-plus"></i> Agregar
                             </button>
                         </div>
                     </div>
@@ -538,42 +568,35 @@
             actualizarContadorCarrito();
         }
 
-        function abrirModalCustom(id) {
-            itemEnPersonalizacion = CATALOGO_MENU.find(i => i.id === id);
-            document.getElementById('custom-plate-title').innerText = itemEnPersonalizacion.nombre;
-            document.getElementById('custom-proteina').selectedIndex = 0;
-            document.getElementById('custom-aderezo').selectedIndex = 0;
-            document.getElementById('custom-notas').value = '';
-            document.getElementById('modal-custom-plate').classList.remove('hidden');
+        function agregarPlatoPersonalizado() {
+            const proteina = document.getElementById('builder-proteina').value;
+            const carbo = document.getElementById('builder-carbo').value;
+            const vegetales = document.getElementById('builder-vegetales').value;
+            const aderezo = document.getElementById('builder-aderezo').value;
+            const notas = document.getElementById('builder-notas').value.trim();
+
+            let precio = 25.00;
+            if (proteina.includes('+S/ 6.00')) precio += 6;
+            if (proteina.includes('+S/ 4.00')) precio += 4;
+
+            carrito.push({
+                nombreBase: "Bowl Personalizado LunchGo",
+                precioFinal: precio,
+                detalles: `Proteína: ${proteina} | Carbo: ${carbo} | Vegetales: ${vegetales} | Aderezo: ${aderezo}${notas ? ' | Nota: ' + notas : ''}`
+            });
+
+            document.getElementById('builder-notas').value = '';
+            actualizarContadorCarrito();
+            alert("¡Bowl personalizado añadido al carrito!");
         }
 
-        function cerrarModalCustom() {
-            document.getElementById('modal-custom-plate').classList.add('hidden');
-        }
-
-        function confirmarPersonalizacion() {
-            if (!itemEnPersonalizacion) return;
-
-            const proteinaVal = document.getElementById('custom-proteina').value;
-            const aderezoVal = document.getElementById('custom-aderezo').value;
-            const notasVal = document.getElementById('custom-notas').value.trim();
-
-            let extraPrecio = 0;
-            if (proteinaVal.includes('+S/ 5.00')) extraPrecio = 5;
-            if (proteinaVal.includes('+S/ 9.00')) extraPrecio = 9;
-            if (proteinaVal.includes('+S/ 7.00')) extraPrecio = 7;
-            if (proteinaVal.includes('+S/ 4.00')) extraPrecio = 4;
-
-            const itemCarrito = {
-                nombreBase: itemEnPersonalizacion.nombre,
-                precioFinal: itemEnPersonalizacion.basePrecio + extraPrecio,
-                proteina: proteinaVal,
-                aderezo: aderezoVal,
-                notas: notasVal
-            };
-
-            carrito.push(itemCarrito);
-            cerrarModalCustom();
+        function agregarSugerencia(id) {
+            const item = CATALOGO_MENU.find(i => i.id === id);
+            carrito.push({
+                nombreBase: item.nombre,
+                precioFinal: item.basePrecio,
+                detalles: item.desc
+            });
             actualizarContadorCarrito();
         }
 
@@ -585,7 +608,7 @@
 
         function validarYIrAResumen() {
             if (carrito.length === 0) {
-                alert("Por favor personaliza y agrega al menos un platillo.");
+                alert("Por favor arma o selecciona al menos un platillo.");
                 return;
             }
             irAPaso(3);
@@ -597,9 +620,7 @@
                 <div class="flex justify-between items-start pt-3">
                     <div>
                         <p class="font-bold text-slate-800 text-sm">${item.nombreBase}</p>
-                        <p class="text-[11px] text-emerald-700 font-semibold">• ${item.proteina}</p>
-                        <p class="text-[11px] text-slate-500">• ${item.aderezo}</p>
-                        ${item.notas ? `<p class="text-[10px] text-amber-700 bg-amber-50 px-2 py-0.5 rounded mt-1">Nota: "${item.notas}"</p>` : ''}
+                        <p class="text-[11px] text-slate-500 font-medium">${item.detalles}</p>
                     </div>
                     <div class="flex items-center gap-3">
                         <span class="font-black text-slate-800 text-sm">S/ ${item.precioFinal.toFixed(2)}</span>
@@ -649,7 +670,7 @@
             const total = subtotal + 7.00;
             const numPedido = `#LG-${Math.floor(10000 + Math.random() * 90000)}`;
 
-            const resumenText = carrito.map(i => `${i.nombreBase} [Extra: ${i.proteina}, Aderezo: ${i.aderezo}${i.notas ? ', Nota: ' + i.notas : ''}]`).join(' | ');
+            const resumenText = carrito.map(i => `${i.nombreBase} (${i.detalles})`).join(' || ');
 
             const pedidoObj = {
                 id: numPedido,
@@ -660,9 +681,13 @@
             };
 
             try {
-                await supabaseClient.from('pedidos').insert([pedidoObj]);
+                const { error } = await supabaseClient.from('pedidos').insert([pedidoObj]);
+                if (error) {
+                    console.error("Error guardando pedido en Supabase:", error);
+                    alert("Error en pedido: " + error.message);
+                }
             } catch (err) {
-                console.error("Error registrando pedido en Supabase:", err);
+                console.error("Error en la conexión con Supabase:", err);
             }
 
             document.getElementById('recibo-id').innerText = numPedido;
@@ -676,7 +701,7 @@
                 <div class="flex justify-between border-b border-slate-100 pb-1">
                     <div>
                         <span class="font-bold text-slate-800 block">${i.nombreBase}</span>
-                        <span class="text-[10px] text-slate-400 block">${i.proteina}</span>
+                        <span class="text-[10px] text-slate-400 block truncate max-w-[200px]">${i.detalles}</span>
                     </div>
                     <span class="font-bold text-slate-800">S/ ${i.precioFinal.toFixed(2)}</span>
                 </div>
@@ -698,7 +723,8 @@
                 const tblClientes = document.getElementById('db-table-clientes');
                 tblClientes.innerHTML = (clientes || []).map(c => `
                     <tr>
-                        <td class="p-2.5 font-bold">${c.nombres || ''} ${c.apellidos || ''}</td>
+                        <td class="p-2.5 font-bold">${c.nombres || ''}</td>
+                        <td class="p-2.5 font-bold">${c.apellidos || ''}</td>
                         <td class="p-2.5">${c.dni || ''}</td>
                         <td class="p-2.5">${c.telefono || ''}</td>
                         <td class="p-2.5">${c.direccion || ''} (${c.referencia || ''})</td>
